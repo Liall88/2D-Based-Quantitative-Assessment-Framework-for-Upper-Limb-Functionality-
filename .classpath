@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/org.json.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/commons-io-2.6/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/weka-3-8-2/weka.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/wekaFixLibs/mtj.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/wekaFixLibs/core.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
