@@ -1,3 +1,4 @@
+//WOLFWOLFWOLFWOLF
 package dataExtraction;
 /**
  * Author: Liall Arafa
@@ -5,17 +6,16 @@ package dataExtraction;
    24 Apr 2018
 	
  */
-
 /**
  * @author la2817
  * 
  * Project: Training a neural network in order to correctly identify motor function in the upper limbs from a 2D camera
  * 
- * This class is used to calculate metrics for use of quantification of upper limb motor functionality analysis
+ * This class is used to calculate kinematic features for use of quantification of upper limb motor functionality analysis
  * It will be done by first analysing the non-paretic arm as a standard, and comparing the paretic arm to it
  * The skeletons of the non-paretic trial are stored in npSkeletonList, while the skeletons of the paretic trial are stored in the pSkeletonList
  * 
- * metrics aer calculated per frame rather than per second 
+ * metrics are calculated per frame rather than per second 
  * 
  *Metrics:
  *trajectory error - is a measure of spatial deviation of the wrist trajectory from the reference trajectory
@@ -23,11 +23,15 @@ package dataExtraction;
  *jerkiness-( or smoothness) is a measure of the variations in the velocity profile. An 'efficient' reach movement should have a smooth velocity profile with an 
  *accelerating pattern followed by a decelerating pattern without any jerks
  *
+ *InputFolder must contain directories which contain all the JSON files for the paretic and non-paretic trials in:
+ * /path/inputfolder/test(trial)/nptest(trial)JSON  and /path/inputfolder/test(trial)/ptest(trial)JSON
+ * It will generate folders for the arff outputs in the specified directory
+ 
  *TODO: change arrays into arraylists (if decide to cap number of frames being viewed
  *TODO: add confidence scores for each metric in order to weight higher confidence scores more
  *TODO: add optimisation weights and thresholds
  *TODO: segmentation in the X-Y plane possible? 
- *TODO: save to ARF File for Weka classes
+ *TODO: put arff writing into seperate class
 
  */
 import java.io.BufferedWriter;
@@ -43,22 +47,21 @@ import org.json.simple.parser.ParseException;
 
 public class OutputTemporalData {
 	
-	//change these parameters for each trial	
-	public static final int trial=1; 	
+	//change these parameters for each trial to generate arff files of kinematic features	
+	public static final int trial=10; 	
 	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/symposiumCupExerciseTests/test" + trial +"Metrics"+"/";
 	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/testData/symposiumCupExercise/trial" +trial + "/";
+	static File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
+	static File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
 	public static final boolean pIsRight=true; //Paretic limb position, change for each trial
-
-		
-	
 	public static int numOfTests;//number of repetitions for each trial
 	
 
 	//where temporal analysis arff files will be stored
-	final static String SPEEDFILE= OUTPUTFOLDER+ "speeds" +".arff";
-	final static String JERKFILE = OUTPUTFOLDER + "jerkiness" +".arff";
-	final static String DISFILE = OUTPUTFOLDER + "disFromRef" +".arff";
-	final static String ANGFILE= OUTPUTFOLDER+ "angles" +".arff";
+	final static String SPEEDFILE= OUTPUTFOLDER+ "speeds" +trial+".arff";
+	final static String JERKFILE = OUTPUTFOLDER + "jerkiness" +trial+".arff";
+	final static String DISFILE = OUTPUTFOLDER + "disFromRef" +trial+".arff";
+	final static String ANGFILE= OUTPUTFOLDER+ "angles" +trial+".arff";
 
 	static final double deltaFrame= 1;
 	//static boolean pArmIsR;//checks if patients paretic arm is their R arm
@@ -462,12 +465,7 @@ public class OutputTemporalData {
 	
 	 public static void main(String[] args) throws IOException, ParseException {
 		
-		//File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +".json").listFiles();
-		//File[] parFiles = new File(INPUTFOLDER +"ptest" +trial +".json").listFiles();
-		
-		File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
-		File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
-		
+	
 		//System.out.println( "DEBUG " + INPUTFOLDER);
 
 		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
@@ -475,24 +473,26 @@ public class OutputTemporalData {
 
 		 setPathArray(nonParFiles, nonparPaths);		
 		//DEBUG Statements
-		 //for(int i = 0; i< nonparPaths.size(); i++){
-			// System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
+		//for(int i = 0; i< nonparPaths.size(); i++){
+			 //System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
 		 //}
 		
 		
 		 setPathArray(parFiles, parPaths);	
 		 //for(int i = 0; i< parPaths.size(); i++){
-			// System.out.println("DEBUG:Par paths :" + parPaths.get(i));
-		// }
+		//	 System.out.println("DEBUG:Par paths :" + parPaths.get(i));}
 		 
 		 setSkeletonList(nonparPaths, npSkeletonList); 
 		 //System.out.println("DEBUG:nPSkeletonList size:" + npSkeletonList.size());
-		 //for(int i = 0; i< npSkeletonList.size(); i++){
-			// System.out.println("DEBUG:nPSkeletonList :" + npSkeletonList.get(i));}
+		// for(int i = 0; i< npSkeletonList.size(); i++){
+		//	 System.out.println("DEBUG:nPSkeletonList :" + npSkeletonList.get(i));}
 		 
-		 setSkeletonList(parPaths, pSkeletonList);
 		// System.out.println("DEBUG:PSkeletonsize :" + pSkeletonList.size());
 
+		 setSkeletonList(parPaths, pSkeletonList);
+		// for(int i = 0; i< pSkeletonList.size(); i++){
+		//	 System.out.println("DEBUG:PSkeletonList :" + pSkeletonList.get(i));}
+		 
 		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
 		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
 		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);

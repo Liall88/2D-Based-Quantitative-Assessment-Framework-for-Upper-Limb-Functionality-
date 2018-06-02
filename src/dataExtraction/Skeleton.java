@@ -15,7 +15,7 @@ package dataExtraction;
  *Since some keypoints are not detected in the frame, it can creates zero vectors,
  *making it impossible to find the angle between the vectors.It Returns NAN
  * 
- *
+ *TODO: filter out empty files 
  */
 
 import java.io.FileNotFoundException;
