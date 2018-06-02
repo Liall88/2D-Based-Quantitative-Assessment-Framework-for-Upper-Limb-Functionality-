@@ -67,12 +67,24 @@ public class Skeleton {
 	public  void setKeypoints(String path) throws IOException, ParseException{
 
 		try {
-						 
+			 
 			Object obj = parser.parse(new FileReader(path ));
 			JSONObject jsonObject= (JSONObject) obj;
 			JSONArray peopleArr = (JSONArray) jsonObject.get("people");
-			//if no people detected in frame
+			
+			//System.out.println("SKELETONDEBUG: people size " + peopleArr.size() );
+			
+			/*try{
+			System.out.println("SKELETONDEBUG: peopleArr" + peopleArr.get(0));}
+			catch (IndexOutOfBoundsException e){
+				System.out.println("SKELETONDEBUG: peopleArr.get(0) exception : " + e);}*/
+
+		
+			//if no people detected in frame			
+			
 			if  (peopleArr.size()==0){
+				//System.out.println("SKELETONDEBUG: people size is 0" + peopleArr.size() );
+
 				key0= new Keypoint( 0.0, 0.0, 0.0);
 				key1= new Keypoint( 0.0, 0.0, 0.0);
 				key2= new Keypoint( 0.0, 0.0, 0.0);
@@ -93,7 +105,16 @@ public class Skeleton {
 					catch (NullPointerException e) {
 						System.out.println("NULL POINTER EXCEPTION THROWN");
 					}
-					JSONArray  posePointsArr = (JSONArray) poseKeyPoints.get("pose_keypoints"); 
+					try {
+						//JSONObject poseKeyPoints = (JSONObject) peopleArr.get(0);
+						poseKeyPoints = (JSONObject) peopleArr.get(0);
+					}
+					catch (NullPointerException e) {
+						System.out.println("NULL POINTER EXCEPTION THROWN");
+					}
+					JSONArray  posePointsArr = (JSONArray) poseKeyPoints.get("pose_keypoints_2d"); 
+					
+					
 					//System.out.println(posePointsArr);
 					
 					//test

@@ -41,16 +41,16 @@ public class Regression{
 		System.out.println(dataset.numAttributes()-1);
 		
 		//build model
-		LinearRegression lr = new LinearRegression();
-		lr.buildClassifier(dataset);
+		//LinearRegression lr = new LinearRegression();
+		//lr.buildClassifier(dataset);
 		//output model
-		System.out.println(lr);		
+		//System.out.println(lr);		
 		
 		//build model
-		//SMOreg smo = new SMOreg();
-		//smo.buildClassifier(dataset);
+		SMOreg smo = new SMOreg();
+		smo.buildClassifier(dataset);
 		//output model
-		//System.out.println(smo);
+		System.out.println(smo);
 			
 	}
 }

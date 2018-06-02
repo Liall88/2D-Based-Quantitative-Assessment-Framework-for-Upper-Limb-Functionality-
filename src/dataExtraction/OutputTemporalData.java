@@ -43,16 +43,22 @@ import org.json.simple.parser.ParseException;
 
 public class OutputTemporalData {
 	
-	public static final int trial=1; //change for each trial
-	
+	//change these parameters for each trial	
+	public static final int trial=1; 	
+	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/symposiumCupExerciseTests/test" + trial +"Metrics"+"/";
+	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/testData/symposiumCupExercise/trial" +trial + "/";
 	public static final boolean pIsRight=true; //Paretic limb position, change for each trial
 
+		
+	
+	public static int numOfTests;//number of repetitions for each trial
+	
+
 	//where temporal analysis arff files will be stored
-	final static String FOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testMetrics" + trial +"/";
-	final static String SPEEDFILE= FOLDER+ "speeds" +".arff";
-	final static String JERKFILE = FOLDER + "jerkiness" +".arff";
-	final static String DISFILE = FOLDER + "disFromRef" +".arff";
-	final static String ANGFILE= FOLDER+ "angles" +".arff";
+	final static String SPEEDFILE= OUTPUTFOLDER+ "speeds" +".arff";
+	final static String JERKFILE = OUTPUTFOLDER + "jerkiness" +".arff";
+	final static String DISFILE = OUTPUTFOLDER + "disFromRef" +".arff";
+	final static String ANGFILE= OUTPUTFOLDER+ "angles" +".arff";
 
 	static final double deltaFrame= 1;
 	//static boolean pArmIsR;//checks if patients paretic arm is their R arm
@@ -191,12 +197,15 @@ public class OutputTemporalData {
 	        if (file.isDirectory()) {
 	           // System.out.println("Directory: " + file.getName());
 	            setPathArray(file.listFiles(),strList); // Calls same method again.
+	            
 	        } else {	
 	        	strList.add(file.getPath());
 	            //System.out.println(file.getPath());
 	        }
 	    }
 	}
+	
+
 	
 	public static void setSkeletonList(ArrayList<String> strList, ArrayList<Skeleton> skList) throws IOException, ParseException{
 		for (int i =0; i <strList.size(); i++){
@@ -452,16 +461,38 @@ public class OutputTemporalData {
 	
 	
 	 public static void main(String[] args) throws IOException, ParseException {
-		 String path = "/homes/la2817/Desktop/Outputs/openPose_outputs/test" +trial + "/";
-		 final File[] nonParFiles = new File(path + "nptest1.json").listFiles();
-		 final File[] parFiles = new File(path +"ptest1.json" ).listFiles();
+		
+		//File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +".json").listFiles();
+		//File[] parFiles = new File(INPUTFOLDER +"ptest" +trial +".json").listFiles();
+		
+		File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
+		File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
+		
+		//System.out.println( "DEBUG " + INPUTFOLDER);
 
-	
+		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
+		//System.out.println("DEBUG:pFiles " + parFiles.length);
 
-		 setPathArray(nonParFiles, nonparPaths);		 
-		 setPathArray(parFiles, parPaths);		 
-		 setSkeletonList(nonparPaths, npSkeletonList);
+		 setPathArray(nonParFiles, nonparPaths);		
+		//DEBUG Statements
+		 //for(int i = 0; i< nonparPaths.size(); i++){
+			// System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
+		 //}
+		
+		
+		 setPathArray(parFiles, parPaths);	
+		 //for(int i = 0; i< parPaths.size(); i++){
+			// System.out.println("DEBUG:Par paths :" + parPaths.get(i));
+		// }
+		 
+		 setSkeletonList(nonparPaths, npSkeletonList); 
+		 //System.out.println("DEBUG:nPSkeletonList size:" + npSkeletonList.size());
+		 //for(int i = 0; i< npSkeletonList.size(); i++){
+			// System.out.println("DEBUG:nPSkeletonList :" + npSkeletonList.get(i));}
+		 
 		 setSkeletonList(parPaths, pSkeletonList);
+		// System.out.println("DEBUG:PSkeletonsize :" + pSkeletonList.size());
+
 		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
 		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
 		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
@@ -473,10 +504,10 @@ public class OutputTemporalData {
 		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
 		
 		 
-		 System.out.println("DEBUG: npSkeletonlist " +npSkeletonList.size());
-		 System.out.println("DEBUG: pSkeletonlist " +pSkeletonList.size());
+		// System.out.println("DEBUG: npSkeletonlist " +npSkeletonList.size());
+		// System.out.println("DEBUG: pSkeletonlist " +pSkeletonList.size());
 		 //create folders for each set of metric data files
-			File directory = new File(FOLDER);
+			File directory = new File(OUTPUTFOLDER);
 		    if (! directory.exists()){
 		        directory.mkdir();
 		        // If you require it to make the entire directory path including parents,
@@ -523,24 +554,24 @@ public class OutputTemporalData {
 
 				
 				String speedHeader = "@RELATION speeds"  + "\n" +
-						"@ATTRIBUTE npkey0SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey0SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey1SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey1SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey2SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey2SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey3SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey3SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey4SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey4SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey5SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey4SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +
-						"@ATTRIBUTE npkey5SpeedList NUMERIC " +
-						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +
-						"@ATTRIBUTE pkey7SpeedList NUMERIC "  +
-						"@ATTRIBUTE listNum NUMERIC "  +
+						"@ATTRIBUTE npkey0SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey0SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey1SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey1SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey2SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey2SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey3SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey3SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey4SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey4SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey5SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey4SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey5SpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE pkey7SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
 
 						
 						"\n \n" ;
@@ -548,65 +579,65 @@ public class OutputTemporalData {
 				bwSpeed.write(speedHeader);
 				
 				String jerkHeader = "@RELATION jerks"  + "\n" +
-						"@ATTRIBUTE npkey0JerkList NUMERIC " +
-						"@ATTRIBUTE pkey0JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey1JerkList NUMERIC " +
-						"@ATTRIBUTE pkey1JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey2JerkList NUMERIC " +
-						"@ATTRIBUTE pkey2JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey3JerkList NUMERIC " +
-						"@ATTRIBUTE pkey3JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey4JerkList NUMERIC " +
-						"@ATTRIBUTE pkey4JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey5JerkList NUMERIC " +
-						"@ATTRIBUTE pkey5JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey6JerkList NUMERIC " +
-						"@ATTRIBUTE pkey6JerkList NUMERIC "  +
-						"@ATTRIBUTE npkey7JerkSpeedList NUMERIC " +
-						"@ATTRIBUTE pkey7JerkSpeedList NUMERIC "  +
-						"@ATTRIBUTE listNum NUMERIC "  +
+						"@ATTRIBUTE npkey0JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey0JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey1JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey1JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey2JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey2JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey3JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey3JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey4JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey4JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey5JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey5JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey6JerkList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey6JerkList NUMERIC "  +"\n"+
+						"@ATTRIBUTE npkey7JerkSpeedList NUMERIC " +"\n"+
+						"@ATTRIBUTE pkey7JerkSpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
 
 						
 						"\n \n" ;
 				bwJerk.write(jerkHeader);
 				
 				String disHeader = "@RELATION disFromRefTraj"  + "\n" +
-						"@ATTRIBUTE disKey0X NUMERIC " +
-						"@ATTRIBUTE disKey0Y NUMERIC "  +
-						"@ATTRIBUTE disKey1X NUMERIC " +
-						"@ATTRIBUTE disKey1Y NUMERIC "  +
-						"@ATTRIBUTE disKey2X NUMERIC " +
-						"@ATTRIBUTE disKey2Y NUMERIC "  +
-						"@ATTRIBUTE disKey3X NUMERIC " +
-						"@ATTRIBUTE disKey3Y NUMERIC "  +
-						"@ATTRIBUTE disKey4X NUMERIC " +
-						"@ATTRIBUTE disKey4Y NUMERIC "  +
-						"@ATTRIBUTE disKey5X NUMERIC " +
-						"@ATTRIBUTE disKey5Y NUMERIC "  +
-						"@ATTRIBUTE disKey6X NUMERIC " +
-						"@ATTRIBUTE disKey6Y NUMERIC "  +
-						"@ATTRIBUTE disKey7X NUMERIC " +
-						"@ATTRIBUTE disKey7Y NUMERIC "  +
-						"@ATTRIBUTE listNum NUMERIC "  +
+						"@ATTRIBUTE disKey0X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey0Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey1X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey1Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey2X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey2Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey3X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey3Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey4X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey4Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey5X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey5Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey6X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey6Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE disKey7X NUMERIC " +"\n"+
+						"@ATTRIBUTE disKey7Y NUMERIC "  +"\n"+
+						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
 
 						
 						"\n \n" ;
 				bwDis.write(disHeader);
 				
 				String AngHeader = "@RELATION angles"  + "\n" +
-						"@ATTRIBUTE npAng0 NUMERIC " +
-						"@ATTRIBUTE pAng0  NUMERIC "  +
-						"@ATTRIBUTE npAng1 NUMERIC " +
-						"@ATTRIBUTE pAng1  NUMERIC "  +
-						"@ATTRIBUTE npAng2 NUMERIC " +
-						"@ATTRIBUTE pAng2  NUMERIC "  +
-						"@ATTRIBUTE npAng3 NUMERIC " +
-						"@ATTRIBUTE pAng3  NUMERIC "  +
-						"@ATTRIBUTE npAng4 NUMERIC " +
-						"@ATTRIBUTE pAng4  NUMERIC "  +
-						"@ATTRIBUTE npAng5 NUMERIC " +
-						"@ATTRIBUTE pAng5  NUMERIC "  +
-						"@ATTRIBUTE listNum NUMERIC "  +
+						"@ATTRIBUTE npAng0 NUMERIC " +"\n"+
+						"@ATTRIBUTE pAng0  NUMERIC "  +"\n"+
+						"@ATTRIBUTE npAng1 NUMERIC " +"\n"+
+						"@ATTRIBUTE pAng1  NUMERIC "  +"\n"+
+						"@ATTRIBUTE npAng2 NUMERIC " +"\n"+
+						"@ATTRIBUTE pAng2  NUMERIC "  +"\n"+
+						"@ATTRIBUTE npAng3 NUMERIC " +"\n"+
+						"@ATTRIBUTE pAng3  NUMERIC "  +"\n"+
+						"@ATTRIBUTE npAng4 NUMERIC " +"\n"+
+						"@ATTRIBUTE pAng4  NUMERIC "  +"\n"+
+						"@ATTRIBUTE npAng5 NUMERIC " +"\n"+
+						"@ATTRIBUTE pAng5  NUMERIC "  +"\n"+
+						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
 
 						"\n \n" ;
 				bwAng.write(AngHeader);
@@ -634,7 +665,7 @@ public class OutputTemporalData {
 						pKey6SpeedList.get(i).toString() + "," +
 						npKey7SpeedList.get(i).toString() + "," +
 						pKey7SpeedList.get(i).toString() + "," +
-						i									   +
+						"?"									   +
 								 "\n"  );
 					}
 				
@@ -656,7 +687,7 @@ public class OutputTemporalData {
 					pKey6JerkList.get(i).toString() + "," +
 					npKey7JerkList.get(i).toString() + "," +
 					pKey7JerkList.get(i).toString() + "," +
-					i									   +
+					"?"										   +
 							 "\n"  );
 				}
 			
@@ -679,7 +710,7 @@ public class OutputTemporalData {
 					disKey6Y.get(i).toString() + "," +
 					disKey7X.get(i).toString() + "," +
 					disKey7Y.get(i).toString() + "," +
-					i									   +
+					"?"										   +
 							 "\n"  );
 				}
 				
@@ -697,7 +728,7 @@ public class OutputTemporalData {
 					pAng4List.get(i).toString() + "," +
 					npAng5List.get(i).toString() + "," +
 					pAng5List.get(i).toString() + "," +
-					i									   +
+					"?"										   +
 								 "\n"  );
 				}
 				
@@ -752,19 +783,19 @@ public class OutputTemporalData {
 				}
 
 			
-		//DEBUG Statements
-		// for(int i = 0; i< nonparPaths.size(); i++){
+		/*DEBUG Statements
+		 for(int i = 0; i< nonparPaths.size(); i++){
 			 //System.out.println("nonPar paths :" + nonParPaths.get(i));
-		// }
-		// for(int i = 0; i< nonparPaths.size(); i++){
-			 //System.out.println("Par paths : " + parPaths.get(i));
-		// }
-		// for(int i = 0; i< npSkeletonList.size(); i++){
-			 //System.out.println("nPSkeletonList :" + nPSkeletonList.get(i));
-		// }
-		// for(int i = 0; i< pSkeletonList.size(); i++){
-			// System.out.println("pSkeletonList :" + pSkeletonList.get(i));
-		// }
+		 }
+		 for(int i = 0; i< nonparPaths.size(); i++){
+			 System.out.println("Par paths : " + parPaths.get(i));
+		 }
+		 for(int i = 0; i< npSkeletonList.size(); i++){
+			 System.out.println("nPSkeletonList :" + npSkeletonList.get(i));
+		 }
+		 for(int i = 0; i< pSkeletonList.size(); i++){
+			 System.out.println("pSkeletonList :" + pSkeletonList.get(i));
+		 }
 		 
 		// for (int i =0; i < npKey0SpeedList.size(); i++){
 			//System.out.println("np key0 SpeedList " + npKey0SpeedList.get(i));

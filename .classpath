@@ -2,14 +2,31 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/json-lib-2.4-jdk15.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/org.json.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/json-simple-1.1.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/commons-io-2.6/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/weka-3-8-2/weka.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/wekaFixLibs/mtj.jar"/>
-	<classpathentry kind="lib" path="/homes/la2817/Desktop/java libs/wekaFixLibs/core.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/org.json.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-master.zip"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19.zip"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-io-2.6/commons-io-2.6-test-sources.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-io-2.6/commons-io-2.6-tests.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-io-2.6/commons-io-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-io-2.6/commons-io-2.6-javadoc.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-io-2.6/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/orsonpdf-1.6-eval.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/orsoncharts-1.4-eval-nofx.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/jfreesvg-2.0.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/jfreechart-1.0.19-swt.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/jfreechart-1.0.19-experimental.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/jfreechart-1.0.19/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/weka-src.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/wekaexamples.zip"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/weka.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/remoteExperimentServer.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/datasets-UCI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

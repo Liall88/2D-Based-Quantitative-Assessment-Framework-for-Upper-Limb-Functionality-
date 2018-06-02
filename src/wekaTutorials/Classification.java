@@ -37,7 +37,7 @@ public class Classification{
 		final  String JERKFILE = FOLDER + "jerkiness" +".arff";
 		final  String DISFILE = FOLDER + "disFromRef" +".arff";*/
 		
-		DataSource source = new DataSource("/homes/la2817/Desktop/Outputs/arff_Outputs/iris/iris.arff");
+		DataSource source = new DataSource("/homes/la2817/Desktop/Outputs/arff_Outputs/testData/iris/iris.arff");
 		Instances dataset = source.getDataSet();	
 		//set class index to the last attribute
 		dataset.setClassIndex(dataset.numAttributes()-1);
