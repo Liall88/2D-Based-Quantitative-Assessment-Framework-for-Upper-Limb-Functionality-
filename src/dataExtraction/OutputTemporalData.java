@@ -35,13 +35,14 @@ package dataExtraction;
  *TODO: segmentation in the X-Y plane possible? 
  *TODO: put arff writing into separate class
  *TODO:upload File Structure needed in GitHub
- *TODO: save openpose outputs and arff outputs relative to eclipse project
+ *TODO: save openpose outputs and arff outputs relative to eclipse project not using absolute paths
 
  */
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,15 +50,22 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
-import ArffIO.ArffReader;
+import ArffIO.GetAllTrials;
 
 public class OutputTemporalData {
 	
 	//change these parameters for each trial to generate arff files of kinematic features	
-	public static final int trial=10; 	
+	public static final int trial=9; 	
 	final static String folderName="symposiumCupExercises";
+	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GE T LOCAL INPUT AND OUTPUT FILEPATHS
 	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics"+"/";
+	 //static String OUT ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
+	//arff_Outputs.testData.symposiumCupExercises.test1Metrics;
+	//final static String OUTPUTFOLDER = "/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics/";
+ 	//String OUTPUTFOLDER = getClass().getResource(arg0)"/Outputs/arff_Outputs/testData"+folderName+"/test"+trial+"Metrics/");
 	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/testData/"+folderName+"/trial" +trial + "/";
+	
+	
 	static File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
 	static File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
 	public static final boolean pIsRight=true; //Paretic limb position, change for each trial
@@ -470,7 +478,8 @@ public class OutputTemporalData {
 	}
 	
 	public static void setLists() throws IOException, ParseException{
-		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
+		
+		setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
 		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
 		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
 		 setKeypointSpeeds(pSkeletonList, pKey0SpeedList, pKey1SpeedList,pKey2SpeedList, pKey3SpeedList,pKey4SpeedList, pKey5SpeedList, pKey6SpeedList,pKey7SpeedList);
@@ -484,20 +493,24 @@ public class OutputTemporalData {
 	
 	 public static void main(String[] args) throws IOException, ParseException {
 		
+		//String outputStr ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
+		//URL outputURL =getResource(outputStr);
+		//final   String OUTPUTFOLDER = outputURL.toString();
+		
 	
-		//System.out.println( "DEBUG " + INPUTFOLDER);
+		System.out.println( "DEBUG " + OUTPUTFOLDER);
 
 		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
 		//System.out.println("DEBUG:pFiles " + parFiles.length);
 
-		 ArffIO.ArffReader.setPathArray(nonParFiles, nonparPaths);		
+		 ArffIO.GetAllTrials.setPathArray(nonParFiles, nonparPaths);		
 		//DEBUG Statements
 		//for(int i = 0; i< nonparPaths.size(); i++){
 			 //System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
 		 //}s
 		
 		
-		 ArffIO.ArffReader.setPathArray(parFiles, parPaths);	
+		 ArffIO.GetAllTrials.setPathArray(parFiles, parPaths);	
 		 //for(int i = 0; i< parPaths.size(); i++){
 		//	 System.out.println("DEBUG:Par paths :" + parPaths.get(i));}
 		 
@@ -526,8 +539,15 @@ public class OutputTemporalData {
 		// System.out.println("DEBUG: npSkeletonlist " +npSkeletonList.size());
 		// System.out.println("DEBUG: pSkeletonlist " +pSkeletonList.size());
 		 //create folders for each set of metric data files
+		 
+		 //write into arff files in output directory
 			File directory = new File(OUTPUTFOLDER);
+			System.out.println("DEBUG: 1 " + directory);
+			System.out.println("DEBUG:2 " + directory.list());
+
 		    if (! directory.exists()){
+				System.out.println("DEBUG:Direciry does not exist");
+
 		        directory.mkdir();
 		        // If you require it to make the entire directory path including parents,
 		        // use directory.mkdirs(); here instead.
@@ -662,6 +682,7 @@ public class OutputTemporalData {
 				bwAng.write(AngHeader);
 				
 				String data = "@DATA \n" ;
+				bwAng.write(data);
 				bwSpeed.write(data);
 				bwJerk.write(data);
 				bwDis.write(data);
