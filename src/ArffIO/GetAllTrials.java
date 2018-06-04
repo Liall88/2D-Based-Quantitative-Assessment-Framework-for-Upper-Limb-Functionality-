@@ -29,10 +29,10 @@ public class GetAllTrials {
 	static File testMetricsDir = new File(INPUTDIR);
 	
 	//File [] metric files contains 0 is speeds, 1 is jerkiness, 2 is disFromRef, 3 is angles
-	static ArrayList <File> speedFiles = new ArrayList<File>();
-	static ArrayList <File> jerkFiles = new ArrayList<File>();
-	static ArrayList <File> disFromRefFiles = new ArrayList<File>();
-	static ArrayList <File> angleFiles = new ArrayList<File>();
+	public static ArrayList <File> speedFiles = new ArrayList<File>();
+	public static ArrayList <File> jerkFiles = new ArrayList<File>();
+	public static ArrayList <File> disFromRefFiles = new ArrayList<File>();
+	public static ArrayList <File> angleFiles = new ArrayList<File>();
 
 	
  	//final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName+"/averages/";

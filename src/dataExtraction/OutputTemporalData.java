@@ -55,9 +55,9 @@ import ArffIO.GetAllTrials;
 public class OutputTemporalData {
 	
 	//change these parameters for each trial to generate arff files of kinematic features	
-	public static final int trial=9; 	
+	public static final int trial=0; 	
 	final static String folderName="symposiumCupExercises";
-	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GE T LOCAL INPUT AND OUTPUT FILEPATHS
+	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics"+"/";
 	 //static String OUT ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
 	//arff_Outputs.testData.symposiumCupExercises.test1Metrics;
@@ -592,7 +592,8 @@ public class OutputTemporalData {
 				bwAng.write(intro);
 
 				
-				String speedHeader = "@RELATION speeds"  + "\n" +
+				/* ORIGINAL
+				 * String speedHeader = "@RELATION speeds"  + "\n" +
 						"@ATTRIBUTE npkey0SpeedList NUMERIC " +"\n"+
 						"@ATTRIBUTE pkey0SpeedList NUMERIC "  +"\n"+
 						"@ATTRIBUTE npkey1SpeedList NUMERIC " +"\n"+
@@ -610,6 +611,29 @@ public class OutputTemporalData {
 						"@ATTRIBUTE npkey5SpeedList NUMERIC " +"\n"+
 						"@ATTRIBUTE pkey5SpeedList NUMERIC "  +"\n"+
 						"@ATTRIBUTE pkey7SpeedList NUMERIC "  +"\n"+
+						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
+
+						
+						"\n \n" ;*/
+				
+				String speedHeader = "@RELATION speeds"  + "\n" +
+						"@ATTRIBUTE df NUMERIC " +"\n"+
+						"@ATTRIBUTE cef NUMERIC "  +"\n"+
+						"@ATTRIBUTE ce NUMERIC " +"\n"+
+						"@ATTRIBUTE cd NUMERIC "  +"\n"+
+						"@ATTRIBUTE ss NUMERIC " +"\n"+
+						"@ATTRIBUTE 76i NUMERIC "  +"\n"+
+						"@ATTRIBUTE kik NUMERIC " +"\n"+
+						"@ATTRIBUTE juj NUMERIC "  +"\n"+
+						"@ATTRIBUTE juyj NUMERIC " +"\n"+
+						"@ATTRIBUTE yuj NUMERIC "  +"\n"+
+						"@ATTRIBUTE jyu NUMERIC " +"\n"+
+						"@ATTRIBUTE yyyy NUMERIC "  +"\n"+
+						"@ATTRIBUTE uju NUMERIC " +"\n"+
+						"@ATTRIBUTE dd NUMERIC "  +"\n"+
+						"@ATTRIBUTE b NUMERIC " +"\n"+
+						"@ATTRIBUTE k NUMERIC "  +"\n"+
+						"@ATTRIBUTE aaaa NUMERIC "  +"\n"+
 						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
 
 						
