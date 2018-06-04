@@ -111,5 +111,5 @@ public class MultipleTrialsData {
 	public static ArrayList<Double> pKey7JerkAvrg= new ArrayList<Double>();
 	
 	//public static void setAverages(ArrayList<Double>  )
-
+	//get data from ARFFReader class
 }

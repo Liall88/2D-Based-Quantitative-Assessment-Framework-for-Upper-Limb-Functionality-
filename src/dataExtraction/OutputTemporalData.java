@@ -13,7 +13,7 @@ package dataExtraction;
  * 
  * This class is used to calculate kinematic features for use of quantification of upper limb motor functionality analysis
  * It will be done by first analysing the non-paretic arm as a standard, and comparing the paretic arm to it
- * The skeletons of the non-paretic trial are stored in npSkeletonList, while the skeletons of the paretic trial are stored in the pSkeletonList
+ * It then outputs the kinematic features into arff files in order to prepare for machine learrnign
  * 
  * metrics are calculated per frame rather than per second 
  * 
@@ -27,11 +27,15 @@ package dataExtraction;
  * /path/inputfolder/test(trial)/nptest(trial)JSON  and /path/inputfolder/test(trial)/ptest(trial)JSON
  * It will generate folders for the arff outputs in the specified directory
  
+ REMEMBER YOUR RESULTS ARE BEING ASSESSED NOT YOUR CODE!
+ 
  *TODO: change arrays into arraylists (if decide to cap number of frames being viewed
  *TODO: add confidence scores for each metric in order to weight higher confidence scores more
  *TODO: add optimisation weights and thresholds
  *TODO: segmentation in the X-Y plane possible? 
- *TODO: put arff writing into seperate class
+ *TODO: put arff writing into separate class
+ *TODO:upload File Structure needed in GitHub
+ *TODO: save openpose outputs and arff outputs relative to eclipse project
 
  */
 import java.io.BufferedWriter;
@@ -45,12 +49,15 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
+import ArffIO.ArffReader;
+
 public class OutputTemporalData {
 	
 	//change these parameters for each trial to generate arff files of kinematic features	
 	public static final int trial=10; 	
-	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/symposiumCupExerciseTests/test" + trial +"Metrics"+"/";
-	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/testData/symposiumCupExercise/trial" +trial + "/";
+	final static String folderName="symposiumCupExercises";
+	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics"+"/";
+	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/testData/"+folderName+"/trial" +trial + "/";
 	static File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
 	static File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
 	public static final boolean pIsRight=true; //Paretic limb position, change for each trial
@@ -193,9 +200,9 @@ public class OutputTemporalData {
 	
 	*/
 	
-	//Must be able to look through multiple frames in order to calculate metrics
-	//check if directory and loop through each file 
-	public static void setPathArray(File[] files,ArrayList<String> strList) {
+	//method which gets the path for each JSON file and saves it in an array 
+	//check if directory and loop through each file and set paths which is used in setSekeltonList() to instantiate skeletons
+	/*public static void setPathArray(File[] files,ArrayList<String> strList) {
 	    for (File file : files) {
 	        if (file.isDirectory()) {
 	           // System.out.println("Directory: " + file.getName());
@@ -206,7 +213,7 @@ public class OutputTemporalData {
 	            //System.out.println(file.getPath());
 	        }
 	    }
-	}
+	}*/
 	
 
 	
@@ -462,6 +469,18 @@ public class OutputTemporalData {
 		return Vec.normalise(jerk); //magnitude of jerk
 	}
 	
+	public static void setLists() throws IOException, ParseException{
+		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
+		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
+		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
+		 setKeypointSpeeds(pSkeletonList, pKey0SpeedList, pKey1SpeedList,pKey2SpeedList, pKey3SpeedList,pKey4SpeedList, pKey5SpeedList, pKey6SpeedList,pKey7SpeedList);
+		 setReferenceTrajectory(npSkeletonList);
+		 setDisFromTraj(refTrajKey0,refTrajKey1,refTrajKey2,refTrajKey3,refTrajKey4,refTrajKey5,refTrajKey6,refTrajKey7, pSkeletonList);
+		 setNormDistances();
+		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
+		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
+		
+	}
 	
 	 public static void main(String[] args) throws IOException, ParseException {
 		
@@ -471,14 +490,14 @@ public class OutputTemporalData {
 		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
 		//System.out.println("DEBUG:pFiles " + parFiles.length);
 
-		 setPathArray(nonParFiles, nonparPaths);		
+		 ArffIO.ArffReader.setPathArray(nonParFiles, nonparPaths);		
 		//DEBUG Statements
 		//for(int i = 0; i< nonparPaths.size(); i++){
 			 //System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
-		 //}
+		 //}s
 		
 		
-		 setPathArray(parFiles, parPaths);	
+		 ArffIO.ArffReader.setPathArray(parFiles, parPaths);	
 		 //for(int i = 0; i< parPaths.size(); i++){
 		//	 System.out.println("DEBUG:Par paths :" + parPaths.get(i));}
 		 
