@@ -53,8 +53,9 @@ import org.json.simple.parser.ParseException;
 import ArffIO.GetAllTrials;
 
 public class OutputTemporalData {
-	
-	//change these parameters for each trial to generate arff files of kinematic features	
+	/*
+	 *change these parameters for each trial to generate arff files of kinematic features	
+	 */
 	public static final int trial=0; 	
 	final static String folderName="symposiumCupExercises";
 	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
@@ -64,7 +65,9 @@ public class OutputTemporalData {
 	//final static String OUTPUTFOLDER = "/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics/";
  	//String OUTPUTFOLDER = getClass().getResource(arg0)"/Outputs/arff_Outputs/testData"+folderName+"/test"+trial+"Metrics/");
 	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/testData/"+folderName+"/trial" +trial + "/";
-	
+	/*
+	 * 
+	 */
 	
 	static File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
 	static File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
