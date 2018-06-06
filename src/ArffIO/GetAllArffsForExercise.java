@@ -20,17 +20,15 @@ import weka.core.Instances;
  *
  *This class gets all Arff files for specific metrics and stores in arrays
  */
-public class GetAllTrials {
+public class GetAllArffsForExercise {
 	//Change these parameters to access different files
 	/*
-	 *change these parameters for each trial to generate arff files of kinematic features	
+	 *change these parameters for each trial 
 	 */
-	final static String folderName="symposiumCupExercises";
+	static String INPUTDIR =ArffReader.INPUTFOLDER;
+	//final static String folderName="symposiumCupExercises";
 	//final static String INPUTDIR = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName+"/";
-	final static String INPUTDIR = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName+"/";
-	/*
-	 * 
-	 */
+
 	static File testMetricsDir = new File(INPUTDIR);
 	
 	//File [] metric files contains 0 is speeds, 1 is jerkiness, 2 is disFromRef, 3 is angles
@@ -83,12 +81,12 @@ public class GetAllTrials {
 			//System.out.println("DEBUG" + speedFiles.size());
 		}
 			
-		for (int i =0;i <speedFiles.size();i++){
-			System.out.println("DEBUG: speedFiles:"+ speedFiles.get(i));
-			System.out.println("DEBUG: jerkFiles:"+ jerkFiles.get(i));
-			System.out.println("DEBUG: disFromRefFiles:"+ disFromRefFiles.get(i));
-			System.out.println("DEBUG: angles:"+ angleFiles.get(i));
-		}
+		/*for (int i =0;i <speedFiles.size();i++){
+			System.out.println("DEBUG: speedFiles:"+i+ " : "+ speedFiles.get(i));
+			System.out.println("DEBUG: jerkFiles:"+i+ " : "+  jerkFiles.get(i));
+			System.out.println("DEBUG: disFromRefFiles:"+i+ " : "+  disFromRefFiles.get(i));
+			System.out.println("DEBUG: angles:"+ i+ " : "+ angleFiles.get(i));
+		}*/
 			
 		}
 		//String INPUTFOLDER = INPUTDIR +"test"+trial+"Metrics" + "/";
@@ -99,23 +97,11 @@ public class GetAllTrials {
 		
 	
 		
-		public static void main (String [] args) {
-			setFileLists();
+		//public static void main (String [] args) {
+			//System.out.println("DEBUG: InputDIR2 " +INPUTDIR2);
+			//setFileLists();
 				
-		}
+		//}
 
-//ORIGINAL : general method which gets the path for each JSON file and saves it in an array 
-		//check if directory and loop through each file and set paths which is used in setSkeletonList() to instantiate skeletons
-		public static void generalSetPathArray(File[] files,ArrayList<String> strList) {
-		    for (File file : files) {
-		        if (file.isDirectory()) {
-		           // System.out.println("Directory: " + file.getName());
-		            generalSetPathArray(file.listFiles(),strList); // Calls same method again.
-		            
-		        } else {	
-		        	strList.add(file.getPath());
-		            //System.out.println(file.getPath());
-		        }
-		    }
-		}	
+
 }

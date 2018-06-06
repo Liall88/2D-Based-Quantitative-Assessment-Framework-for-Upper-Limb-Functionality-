@@ -116,7 +116,7 @@ public class ArffWriter {
 					"@ATTRIBUTE ce NUMERIC " +"\n"+
 					"@ATTRIBUTE cd NUMERIC "  +"\n"+
 					"@ATTRIBUTE ss NUMERIC " +"\n"+
-					"@ATTRIBUTE 76i NUMERIC "  +"\n"+
+					"@ATTRIBUTE i NUMERIC "  +"\n"+
 					"@ATTRIBUTE kik NUMERIC " +"\n"+
 					"@ATTRIBUTE juj NUMERIC "  +"\n"+
 					"@ATTRIBUTE juyj NUMERIC " +"\n"+
@@ -214,7 +214,7 @@ public class ArffWriter {
 					npSpeedList.get(2).get(i).toString() + ","  +
 					pSpeedList.get(2).get(i).toString() + "," +
 					npSpeedList.get(3).get(i).toString() + "," +
-					pSpeedList.get(3).toString() + "," +
+					pSpeedList.get(3).get(i).toString() + "," +
 					npSpeedList.get(4).get(i).toString() + ","  +
 					pSpeedList.get(4).get(i).toString() + "," +
 					npSpeedList.get(5).get(i).toString() + "," +
@@ -236,7 +236,7 @@ public class ArffWriter {
 				npJerkList.get(2).get(i).toString() + ","  +
 				pJerkList.get(2).get(i).toString() + "," +
 				npJerkList.get(3).get(i).toString() + "," +
-				pJerkList.get(3).toString() + "," +
+				pJerkList.get(3).get(i).toString() + "," +
 				npJerkList.get(4).get(i).toString() + ","  +
 				pJerkList.get(4).get(i).toString() + "," +
 				npJerkList.get(5).get(i).toString() + "," +

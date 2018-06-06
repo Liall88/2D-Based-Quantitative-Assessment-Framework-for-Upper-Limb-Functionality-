@@ -51,7 +51,7 @@ import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
 import ArffIO.ArffWriter;
-import ArffIO.GetAllTrials;
+import ArffIO.GetAllArffsForExercise;
 
 public class OutputTemporalData {
 	/*
@@ -562,14 +562,14 @@ public class OutputTemporalData {
 		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
 		//System.out.println("DEBUG:pFiles " + parFiles.length);
 
-		 ArffIO.GetAllTrials.generalSetPathArray(nonParFiles, nonparPaths);		
+		 ArffIO.ArffReader.generalSetPathArray(nonParFiles, nonparPaths);		
 		//DEBUG Statements
 		//for(int i = 0; i< nonparPaths.size(); i++){
 			 //System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
 		 //}s
 		
 		
-		 ArffIO.GetAllTrials.generalSetPathArray(parFiles, parPaths);	
+		 ArffIO.ArffReader.generalSetPathArray(parFiles, parPaths);	
 		 //for(int i = 0; i< parPaths.size(); i++){
 		//	 System.out.println("DEBUG:Par paths :" + parPaths.get(i));}
 		 
