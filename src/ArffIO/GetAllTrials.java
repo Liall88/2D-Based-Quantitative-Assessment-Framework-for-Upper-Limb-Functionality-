@@ -106,11 +106,11 @@ public class GetAllTrials {
 
 //ORIGINAL : general method which gets the path for each JSON file and saves it in an array 
 		//check if directory and loop through each file and set paths which is used in setSkeletonList() to instantiate skeletons
-		public static void setPathArray(File[] files,ArrayList<String> strList) {
+		public static void generalSetPathArray(File[] files,ArrayList<String> strList) {
 		    for (File file : files) {
 		        if (file.isDirectory()) {
 		           // System.out.println("Directory: " + file.getName());
-		            setPathArray(file.listFiles(),strList); // Calls same method again.
+		            generalSetPathArray(file.listFiles(),strList); // Calls same method again.
 		            
 		        } else {	
 		        	strList.add(file.getPath());

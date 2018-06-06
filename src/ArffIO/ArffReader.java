@@ -42,7 +42,9 @@ public class ArffReader {
 	final static String folderName="symposiumCupExercises";
 	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics"+"/";
-	
+	/*
+	 *	
+	 */
 	
 	
 	//2D arrays for each metric and their contents in String [] format
@@ -96,10 +98,10 @@ public class ArffReader {
 		String line =sc.nextLine();
     	//System.out.println("DEBUG Next line:"+line);
 		//String[] row = line.split("");
-		String[] lineTemp = line.split("\\r?\\n");//split each line
-		rowList.add(lineTemp);
-		//String [] valueTemp =line.split(","); //split each value
-		//System.out.println("DEBUG: row temp[0] : "+valueTemp[0]);
+		//String[] lineTemp = line.split("\\r?\\n");//split each line
+		//rowList.add(lineTemp);
+		String [] valueTemp =line.split(","); //split each value
+		System.out.println("DEBUG:  Valuetemp[0] : "+valueTemp[0]);
 		//System.out.println("Row" + count + "  : " + rows[count]);
 		count++;
 		}
@@ -136,12 +138,13 @@ public class ArffReader {
 
 ;  
 	}*/
-		for(int i =0; i <jerkFiles.size(); i++){		
+		for(int i =0; i <jerkFiles.size(); i++){ //number of speed,jerk, disFromRefFiles and angles should be the same
 			ArrayList<String[]>jerkRows= new ArrayList<String[]>()  ; 
 			searchFileAndSaveStringRows(jerkFiles.get(i), jerkRows);		
 			jerkMetricsFile.add(jerkRows);
 			//System.out.println("DEBUG: jerkMetricsFile.get("+i+"): " + jerkMetricsFile.get(i));
-			System.out.println("DEBUG: jerkMetricsFile.size " + jerkMetricsFile.size());
+			//System.out.println("DEBUG: jerkMetricsFile.size " + jerkMetricsFile.size());
+			System.out.println("DEBUG: jerkMetricsFile.get(i).get(0) " + jerkMetricsFile.get(i).get(0).toString());
 
 			//System.out.println("DEBUG: jerkRowsSize"+jerkRows.size());
 
@@ -151,7 +154,7 @@ public class ArffReader {
 			speedMetricsFile.add(speedRows);
 			//System.out.println("DEBUG: speedMetricsFile.get(i): " + speedMetricsFile.get(i));
 			//System.out.println("DEBUG: speedRowsSize "+speedRows.size());
-			System.out.println("DEBUG: speedMetricsFile.size " + speedMetricsFile.size());
+			//System.out.println("DEBUG: speedMetricsFile.size " + speedMetricsFile.size());
 
 
 			
@@ -160,7 +163,7 @@ public class ArffReader {
 			angleMetricsFile.add(angleRows);
 			//System.out.println("DEBUG: angleMetricsFile.get(i): " + angleMetricsFile.get(i));
 			//System.out.println("DEBUG: angleRowsSize "+angleRows.size());
-			System.out.println("DEBUG: angleMetricsFile.size " + angleMetricsFile.size());
+			//System.out.println("DEBUG: angleMetricsFile.size " + angleMetricsFile.size());
 
 
 			ArrayList<String[]> disFromRefRows =new ArrayList<String[]>() ; 
@@ -168,12 +171,15 @@ public class ArffReader {
 			disFromRefMetricsFile.add(disFromRefRows);
 			//System.out.println("DEBUG: disFromrefMetrics.get(i): " + disFromRefMetricsFile.get(i));
 			//System.out.println("DEBUG: disFromRefSize "+disFromRefRows.size());
-			System.out.println("DEBUG: disFromRefMetricsFile.size " + disFromRefMetricsFile.size());
-
-
-
+			//System.out.println("DEBUG: disFromRefMetricsFile.size " + disFromRefMetricsFile.size());
 			
 		}
+		for(int i =0; i <jerkMetricsFile.size(); i++){
+			
+		}
+		
+		
+		
 		
 		/*for(int i =0; i <jerkMetricsFile.size(); i++){
 			System.out.println("DEBUG: jerkMetricsFile.get(i): " + jerkMetricsFile.get(i));

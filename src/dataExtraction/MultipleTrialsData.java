@@ -3,7 +3,6 @@
    Imperial College London
    15 May 2018
 	
-	This code reads multiple .arff files from tests and finds the average 
  */
 package dataExtraction;
 
@@ -18,6 +17,9 @@ public class MultipleTrialsData {
 	final int trialNum = OutputTemporalData.numOfTests;
 	
 	//ArrayLists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
+	public static ArrayList<ArrayList<Double>> npAngAvrgList = new ArrayList<ArrayList<Double>>();
+	public static ArrayList<ArrayList<Double>> pAngAvrgList = new ArrayList<ArrayList<Double>>();
+
 	public static ArrayList<Double> npAng0Avrg = new ArrayList<Double>();
 	public static ArrayList<Double> npAng1Avrg = new ArrayList<Double>();
 	public static ArrayList<Double> npAng2Avrg = new ArrayList<Double>();
@@ -44,6 +46,10 @@ public class MultipleTrialsData {
 	public static ArrayList<Keypoint> refTrajKey7Avrg= new ArrayList<Keypoint>();
 	
 	//distances of keypoint in terms of x,y coordinates from reference trajectory Keypoints
+	public static ArrayList<ArrayList<Double>> disXAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	public static ArrayList<ArrayList<Double>> disYAvrgList= new ArrayList<ArrayList<Double>>(); ;
+
+	
 	public static ArrayList<Double> disKey0XAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> disKey0YAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1XAvrg= new ArrayList<Double>();
@@ -62,6 +68,8 @@ public class MultipleTrialsData {
 	public static ArrayList<Double> disKey7YAvrg= new ArrayList<Double>();
 	
 	//normalised distances of keypoint from reference trajectory
+	public static ArrayList<ArrayList<Double>> disNormAvrgList= new ArrayList<ArrayList<Double>>(); ;
+
 	public static ArrayList<Double> disKey0NormAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1NormAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> disKey2NormAvrg= new ArrayList<Double>();
@@ -73,6 +81,9 @@ public class MultipleTrialsData {
 	
 	
 	//speed  of keypoints in terms of pixel per frame between skeletons
+	public static ArrayList<ArrayList<Double>> npSpeedAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	public static ArrayList<ArrayList<Double>> pSpeedAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	
 	public static ArrayList<Double> npKey0SpeedAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> npKey1SpeedAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> npKey2SpeedAvrg= new ArrayList<Double>();
@@ -92,6 +103,9 @@ public class MultipleTrialsData {
 	public static ArrayList<Double> pKey7SpeedAvrg= new ArrayList<Double>();
 
 	//jerk (or smoothness) of keypoints
+	public static ArrayList<ArrayList<Double>> npJerkAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	public static ArrayList<ArrayList<Double>> pJerkAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	
 	public static ArrayList<Double> npKey0JerkAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> npKey1JerkAvrg= new ArrayList<Double>();
 	public static ArrayList<Double> npKey2JerkAvrg= new ArrayList<Double>();

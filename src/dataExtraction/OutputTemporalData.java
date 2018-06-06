@@ -50,6 +50,7 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
+import ArffIO.ArffWriter;
 import ArffIO.GetAllTrials;
 
 public class OutputTemporalData {
@@ -98,6 +99,10 @@ public class OutputTemporalData {
 	public static ArrayList<Skeleton> pSkeletonList = new ArrayList<Skeleton>();//trial1: right arm
 	
 	//Arraylists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
+	//2D arrays that contain arraylists of data for each keypoint(0-7)
+	public static ArrayList<ArrayList<Double>> npAngList = new ArrayList<ArrayList<Double>>();
+	public static ArrayList<ArrayList<Double>> pAngList = new ArrayList<ArrayList<Double>>();
+
 	public static ArrayList<Double> npAng0List = new ArrayList<Double>();
 	public static ArrayList<Double> npAng1List = new ArrayList<Double>();
 	public static ArrayList<Double> npAng2List = new ArrayList<Double>();
@@ -114,6 +119,7 @@ public class OutputTemporalData {
 	
 	
 	//reference trajectory taken from non-paretic arm 
+
 	public static ArrayList<Keypoint> refTrajKey0= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey1= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey2= new ArrayList<Keypoint>();
@@ -124,6 +130,10 @@ public class OutputTemporalData {
 	public static ArrayList<Keypoint> refTrajKey7= new ArrayList<Keypoint>();
 	
 	//distances of keypoint in terms of x,y coordinates from reference trajectory Keypoints
+	public static ArrayList<ArrayList<Double>> disXList= new ArrayList<ArrayList<Double>>(); ;
+	public static ArrayList<ArrayList<Double>> disYList= new ArrayList<ArrayList<Double>>(); ;
+
+
 	public static ArrayList<Double> disKey0X= new ArrayList<Double>();
 	public static ArrayList<Double> disKey0Y= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1X= new ArrayList<Double>();
@@ -142,6 +152,8 @@ public class OutputTemporalData {
 	public static ArrayList<Double> disKey7Y= new ArrayList<Double>();
 	
 	//normalised distances of keypoint from reference trajectory
+	public static ArrayList<ArrayList<Double>> disNormList= new ArrayList<ArrayList<Double>>(); ;
+
 	public static ArrayList<Double> disKey0Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey2Norm= new ArrayList<Double>();
@@ -153,6 +165,9 @@ public class OutputTemporalData {
 	
 	
 	//speed  of keypoints in terms of pixel per frame between skeletons
+	public static ArrayList<ArrayList<Double>> npSpeedList= new ArrayList<ArrayList<Double>>(); ;
+	public static ArrayList<ArrayList<Double>> pSpeedList= new ArrayList<ArrayList<Double>>(); ;
+	
 	public static ArrayList<Double> npKey0SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey1SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey2SpeedList= new ArrayList<Double>();
@@ -172,6 +187,9 @@ public class OutputTemporalData {
 	public static ArrayList<Double> pKey7SpeedList= new ArrayList<Double>();
 
 	//jerk (or smoothness) of keypoints
+	public static ArrayList<ArrayList<Double>> npJerkList= new ArrayList<ArrayList<Double>>(); ;
+	public static ArrayList<ArrayList<Double>> pJerkList= new ArrayList<ArrayList<Double>>(); ;
+	
 	public static ArrayList<Double> npKey0JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey1JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey2JerkList= new ArrayList<Double>();
@@ -455,6 +473,44 @@ public class OutputTemporalData {
 		return speed; 
 	}
 	
+	public static void setMultiArrays(){
+		
+		npAngList.add(npAng0List);pAngList.add(pAng0List);
+		npAngList.add(npAng1List);pAngList.add(pAng1List);
+		npAngList.add(npAng2List);pAngList.add(pAng2List);
+		npAngList.add(npAng3List);pAngList.add(pAng3List);
+		npAngList.add(npAng4List);pAngList.add(pAng4List);
+		npAngList.add(npAng5List);pAngList.add(pAng5List);
+
+		disXList.add(disKey0X);disYList.add(disKey0Y);
+		disXList.add(disKey1X);disYList.add(disKey1Y);
+		disXList.add(disKey2X);disYList.add(disKey2Y);
+		disXList.add(disKey3X);disYList.add(disKey3Y);
+		disXList.add(disKey4X);disYList.add(disKey4Y);
+		disXList.add(disKey5X);disYList.add(disKey5Y);
+		disXList.add(disKey6X);disYList.add(disKey6Y);
+		disXList.add(disKey7X);disYList.add(disKey7Y);
+
+		npSpeedList.add(npKey0SpeedList);pSpeedList.add(pKey0SpeedList);
+		npSpeedList.add(npKey1SpeedList);pSpeedList.add(pKey1SpeedList);
+		npSpeedList.add(npKey2SpeedList);pSpeedList.add(pKey2SpeedList);
+		npSpeedList.add(npKey3SpeedList);pSpeedList.add(pKey3SpeedList);
+		npSpeedList.add(npKey4SpeedList);pSpeedList.add(pKey4SpeedList);
+		npSpeedList.add(npKey5SpeedList);pSpeedList.add(pKey5SpeedList);
+		npSpeedList.add(npKey6SpeedList);pSpeedList.add(pKey6SpeedList);
+		npSpeedList.add(npKey7SpeedList);pSpeedList.add(pKey7SpeedList);
+
+		npJerkList.add(npKey0JerkList);pJerkList.add(pKey0JerkList);
+		npJerkList.add(npKey1JerkList);pJerkList.add(pKey1JerkList);
+		npJerkList.add(npKey2JerkList);pJerkList.add(pKey2JerkList);
+		npJerkList.add(npKey3JerkList);pJerkList.add(pKey3JerkList);
+		npJerkList.add(npKey4JerkList);pJerkList.add(pKey4JerkList);
+		npJerkList.add(npKey5JerkList);pJerkList.add(pKey5JerkList);
+		npJerkList.add(npKey6JerkList);pJerkList.add(pKey6JerkList);
+		npJerkList.add(npKey7JerkList);pJerkList.add(pKey7JerkList);
+		
+	}
+	
 	public static Vec getVelocityVec(double keyX0, double keyY0, double keyX1, double keyY1, int f0, int f1){ //first derivative of position vector
 		double i, j;
 		Vec velVec;
@@ -482,7 +538,7 @@ public class OutputTemporalData {
 	
 	public static void setLists() throws IOException, ParseException{
 		
-		setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
+		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
 		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
 		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
 		 setKeypointSpeeds(pSkeletonList, pKey0SpeedList, pKey1SpeedList,pKey2SpeedList, pKey3SpeedList,pKey4SpeedList, pKey5SpeedList, pKey6SpeedList,pKey7SpeedList);
@@ -491,7 +547,7 @@ public class OutputTemporalData {
 		 setNormDistances();
 		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
 		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
-		
+		 setMultiArrays();
 	}
 	
 	 public static void main(String[] args) throws IOException, ParseException {
@@ -501,19 +557,19 @@ public class OutputTemporalData {
 		//final   String OUTPUTFOLDER = outputURL.toString();
 		
 	
-		System.out.println( "DEBUG " + OUTPUTFOLDER);
+		//System.out.println( "DEBUG " + OUTPUTFOLDER);
 
 		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
 		//System.out.println("DEBUG:pFiles " + parFiles.length);
 
-		 ArffIO.GetAllTrials.setPathArray(nonParFiles, nonparPaths);		
+		 ArffIO.GetAllTrials.generalSetPathArray(nonParFiles, nonparPaths);		
 		//DEBUG Statements
 		//for(int i = 0; i< nonparPaths.size(); i++){
 			 //System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
 		 //}s
 		
 		
-		 ArffIO.GetAllTrials.setPathArray(parFiles, parPaths);	
+		 ArffIO.GetAllTrials.generalSetPathArray(parFiles, parPaths);	
 		 //for(int i = 0; i< parPaths.size(); i++){
 		//	 System.out.println("DEBUG:Par paths :" + parPaths.get(i));}
 		 
@@ -528,23 +584,19 @@ public class OutputTemporalData {
 		// for(int i = 0; i< pSkeletonList.size(); i++){
 		//	 System.out.println("DEBUG:PSkeletonList :" + pSkeletonList.get(i));}
 		 
-		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
-		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
-		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
-		 setKeypointSpeeds(pSkeletonList, pKey0SpeedList, pKey1SpeedList,pKey2SpeedList, pKey3SpeedList,pKey4SpeedList, pKey5SpeedList, pKey6SpeedList,pKey7SpeedList);
-		 setReferenceTrajectory(npSkeletonList);
-		 setDisFromTraj(refTrajKey0,refTrajKey1,refTrajKey2,refTrajKey3,refTrajKey4,refTrajKey5,refTrajKey6,refTrajKey7, pSkeletonList);
-		 setNormDistances();
-		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
-		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
+		setLists();		
+		//System.out.println("DEBUG npSpeedList.get(0).size()is " + npSpeedList.get(0).size()); 
+		ArffWriter.writeSingleTrialArff(trial,OUTPUTFOLDER,npAngList,pAngList,disXList,disYList,npSpeedList,pSpeedList,npJerkList,pJerkList);
+	}
+}
+	 
 		
-		 
 		// System.out.println("DEBUG: npSkeletonlist " +npSkeletonList.size());
 		// System.out.println("DEBUG: pSkeletonlist " +pSkeletonList.size());
 		 //create folders for each set of metric data files
 		 
 		 //write into arff files in output directory
-			File directory = new File(OUTPUTFOLDER);
+			/*File directory = new File(OUTPUTFOLDER);
 			System.out.println("DEBUG: 1 " + directory);
 			System.out.println("DEBUG:2 " + directory.list());
 
@@ -617,7 +669,7 @@ public class OutputTemporalData {
 						"@ATTRIBUTE class {WMFT0, WMFT1, WMFT2,WMFT3,WMFT4,WMFT5} "  +
 
 						
-						"\n \n" ;*/
+						"\n \n" ;
 				
 				String speedHeader = "@RELATION speeds"  + "\n" +
 						"@ATTRIBUTE df NUMERIC " +"\n"+
@@ -847,7 +899,7 @@ public class OutputTemporalData {
 	
 					}
 	
-				}
+				}*/
 
 			
 		/*DEBUG Statements
@@ -1153,11 +1205,11 @@ public class OutputTemporalData {
 		 }*/
 	
 
-	 }
+	 
 
 	 
 	 
 	 
- }
+ 
 	 
 	
