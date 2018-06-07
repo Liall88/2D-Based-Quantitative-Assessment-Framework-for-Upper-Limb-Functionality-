@@ -26,6 +26,8 @@ package dataExtraction;
  *InputFolder must contain directories which contain all the JSON files for the paretic and non-paretic trials in:
  * /path/inputfolder/test(trial)/nptest(trial)JSON  and /path/inputfolder/test(trial)/ptest(trial)JSON
  * It will generate folders for the arff outputs in the specified directory
+ * 
+ * class generates and returns arff object generated for each metric for each openpose trial
  
  REMEMBER YOUR RESULTS ARE BEING ASSESSED NOT YOUR CODE!
  
@@ -50,14 +52,17 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
-import ArffIO.ArffWriter;
-import ArffIO.GetAllArffsForExercise;
+import arff.Arff;
+import arff.ArffWriter;
+import arff.GetAllArffsForExercise;
 
-public class OutputTemporalData {
+
+public class OutputTemporalDataMain {
 	/*
 	 *change these parameters for each trial to generate arff files of kinematic features	
 	 */
 	public static final int trial=0; 	
+	public static String WMFTClass="?";//wolf motor function class (0-5) or ? if unknown
 	final static String folderName="symposiumCupExercises";
 	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 	final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics"+"/";
@@ -70,17 +75,18 @@ public class OutputTemporalData {
 	 * 
 	 */
 	
+	//where temporal analysis arff files will be stored
+	final static String SPEEDFILE= OUTPUTFOLDER+ "speeds" +trial+".arff";	
+	final static String ANGFILE= OUTPUTFOLDER+ "angles" +trial+".arff";
+	final static String DISFILE = OUTPUTFOLDER + "disFromRef" +trial+".arff";
+	final static String JERKFILE = OUTPUTFOLDER + "jerkiness" +trial+".arff";
+	
 	static File[] nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
 	static File[] parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
 	public static final boolean pIsRight=true; //Paretic limb position, change for each trial
 	public static int numOfTests;//number of repetitions for each trial
 	
 
-	//where temporal analysis arff files will be stored
-	final static String SPEEDFILE= OUTPUTFOLDER+ "speeds" +trial+".arff";
-	final static String JERKFILE = OUTPUTFOLDER + "jerkiness" +trial+".arff";
-	final static String DISFILE = OUTPUTFOLDER + "disFromRef" +trial+".arff";
-	final static String ANGFILE= OUTPUTFOLDER+ "angles" +trial+".arff";
 
 	static final double deltaFrame= 1;
 	//static boolean pArmIsR;//checks if patients paretic arm is their R arm
@@ -100,6 +106,8 @@ public class OutputTemporalData {
 	
 	//Arraylists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
 	//2D arrays that contain arraylists of data for each keypoint(0-7)
+	
+	//Arraylists For Arff Object
 	public static ArrayList<ArrayList<Double>> npAngList = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<ArrayList<Double>> pAngList = new ArrayList<ArrayList<Double>>();
 
@@ -207,6 +215,8 @@ public class OutputTemporalData {
 	public static ArrayList<Double> pKey5JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> pKey6JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> pKey7JerkList= new ArrayList<Double>();
+	
+	
 	//theta of keypoints per frame between skeletons
 	
 	/*static ArrayList<Double> npKey0thetaList= new ArrayList<Double>();
@@ -473,7 +483,35 @@ public class OutputTemporalData {
 		return speed; 
 	}
 	
-	public static void setMultiArrays(){
+	
+	public static Vec getVelocityVec(double keyX0, double keyY0, double keyX1, double keyY1, int f0, int f1){ //first derivative of position vector
+		double i, j;
+		Vec velVec;
+		double r,s ;
+		int t=f1-f0;;
+		r= keyX1-keyX0;
+		s=keyY1-keyY0;
+		i = (r)/t;
+		j = (s)/t;
+		velVec = new Vec(i,j);
+		return velVec;	
+	}
+	public static Vec getAcceleration(Vec velVec1, Vec velVec2, int f0, int f1){//second derivative of position vector
+		Vec acc;
+		int t=f1-f0;
+		acc= new Vec (((1/t)*velVec2.i-velVec1.i),(-(1/t)*velVec2.j-velVec1.j));
+		return acc;
+	}
+	public static double getJerkiness(Vec accVec1, Vec accVec2, int f0, int f1){//third derivative of position vector
+		Vec jerk;
+		int t=f1-f0;
+		jerk= new Vec (((1/t)*accVec2.i-accVec1.i),(-(1/t)*accVec2.j-accVec1.j));
+		return Vec.normalise(jerk); //magnitude of jerk
+	}
+	
+	
+
+	public static void setMultiArrays(){ //sets the 2D arrays representing arraylist for each keypoint 
 		
 		npAngList.add(npAng0List);pAngList.add(pAng0List);
 		npAngList.add(npAng1List);pAngList.add(pAng1List);
@@ -511,32 +549,27 @@ public class OutputTemporalData {
 		
 	}
 	
-	public static Vec getVelocityVec(double keyX0, double keyY0, double keyX1, double keyY1, int f0, int f1){ //first derivative of position vector
-		double i, j;
-		Vec velVec;
-		double r,s ;
-		int t=f1-f0;;
-		r= keyX1-keyX0;
-		s=keyY1-keyY0;
-		i = (r)/t;
-		j = (s)/t;
-		velVec = new Vec(i,j);
-		return velVec;	
+	
+	//getter methods for Arff objects 
+	public static Arff getSpeedArff(){
+		Arff sArff = new Arff(SPEEDFILE,trial,WMFTClass,npSpeedList,pSpeedList);
+		return sArff;
 	}
-	public static Vec getAcceleration(Vec velVec1, Vec velVec2, int f0, int f1){//second derivative of position vector
-		Vec acc;
-		int t=f1-f0;
-		acc= new Vec (((1/t)*velVec2.i-velVec1.i),(-(1/t)*velVec2.j-velVec1.j));
-		return acc;
+	public static Arff getJerkArff(){
+		Arff jArff = new Arff(JERKFILE,trial,WMFTClass,npJerkList,pJerkList);
+		return jArff;
 	}
-	public static double getJerkiness(Vec accVec1, Vec accVec2, int f0, int f1){//third derivative of position vector
-		Vec jerk;
-		int t=f1-f0;
-		jerk= new Vec (((1/t)*accVec2.i-accVec1.i),(-(1/t)*accVec2.j-accVec1.j));
-		return Vec.normalise(jerk); //magnitude of jerk
+	public static Arff getAngArff(){
+		Arff aArff = new Arff(ANGFILE,trial,WMFTClass,npAngList,pAngList);
+		return aArff;
+	}
+	public static Arff getDisFromRefArff(){
+		Arff dArff = new Arff(DISFILE,trial,WMFTClass,disXList,disYList);
+		return dArff;
 	}
 	
-	public static void setLists() throws IOException, ParseException{
+	
+	public static void setAllLists() throws IOException, ParseException{
 		
 		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
 		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
@@ -547,7 +580,7 @@ public class OutputTemporalData {
 		 setNormDistances();
 		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
 		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
-		 setMultiArrays();
+		 setMultiArrays();		 
 	}
 	
 	 public static void main(String[] args) throws IOException, ParseException {
@@ -562,14 +595,14 @@ public class OutputTemporalData {
 		//System.out.println("DEBUG:npFiles " + nonParFiles.length);
 		//System.out.println("DEBUG:pFiles " + parFiles.length);
 
-		 ArffIO.ArffReader.generalSetPathArray(nonParFiles, nonparPaths);		
+		 arff.ArffReadAll.generalSetPathArray(nonParFiles, nonparPaths);		
 		//DEBUG Statements
 		//for(int i = 0; i< nonparPaths.size(); i++){
 			 //System.out.println("DEBUG:nonPar paths :" + nonparPaths.get(i));
 		 //}s
 		
 		
-		 ArffIO.ArffReader.generalSetPathArray(parFiles, parPaths);	
+		 arff.ArffReadAll.generalSetPathArray(parFiles, parPaths);	
 		 //for(int i = 0; i< parPaths.size(); i++){
 		//	 System.out.println("DEBUG:Par paths :" + parPaths.get(i));}
 		 
@@ -584,9 +617,17 @@ public class OutputTemporalData {
 		// for(int i = 0; i< pSkeletonList.size(); i++){
 		//	 System.out.println("DEBUG:PSkeletonList :" + pSkeletonList.get(i));}
 		 
-		setLists();		
+		setAllLists();		
 		//System.out.println("DEBUG npSpeedList.get(0).size()is " + npSpeedList.get(0).size()); 
-		ArffWriter.writeSingleTrialArff(trial,OUTPUTFOLDER,npAngList,pAngList,disXList,disYList,npSpeedList,pSpeedList,npJerkList,pJerkList);
+		 Arff speedArff= getSpeedArff();
+		//System.out.println("DEBUG: speedArff :" + speedArff.path);
+
+		 Arff angArff= getAngArff();
+		 Arff disArff= getDisFromRefArff();
+		 Arff jerkArff= getJerkArff();
+
+		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, speedArff, angArff, disArff, jerkArff);
+		//ArffWriter.writeSingleTrialArff(trial,WMFTClass,OUTPUTFOLDER,npAngList,pAngList,disXList,disYList,npSpeedList,pSpeedList,npJerkList,pJerkList);
 	}
 }
 	 

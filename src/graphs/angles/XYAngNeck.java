@@ -25,11 +25,11 @@ public class XYAngNeck {
 
    public static void main( String[ ] args )throws Exception {
 	
-	   dataExtraction.OutputTemporalData.main(args);
-		int trial = dataExtraction.OutputTemporalData.trial;
+	   dataExtraction.OutputTemporalDataMain.main(args);
+		int trial = dataExtraction.OutputTemporalDataMain.trial;
 		
-		ArrayList <Double> pAng0List=dataExtraction.OutputTemporalData.npAng0List;
-		ArrayList <Double> npAng3List=dataExtraction.OutputTemporalData.pAng3List;
+		ArrayList <Double> pAng0List=dataExtraction.OutputTemporalDataMain.npAng0List;
+		ArrayList <Double> npAng3List=dataExtraction.OutputTemporalDataMain.pAng3List;
 			  
 	     final XYSeries p = new XYSeries( "paretic Limb Trial" );
 	      

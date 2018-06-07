@@ -21,16 +21,16 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.ChartUtilities; 
 
-import dataExtraction.OutputTemporalData;
+import dataExtraction.OutputTemporalDataMain;
 
 public class XYJerkElbows {
 
    public static void main( String[ ] args )throws Exception {
-	int trial= OutputTemporalData.trial;
-	dataExtraction.OutputTemporalData.main(args);
+	int trial= OutputTemporalDataMain.trial;
+	dataExtraction.OutputTemporalDataMain.main(args);
 
-	ArrayList <Double> npKey6JerkList=dataExtraction.OutputTemporalData.npKey6JerkList;
-	ArrayList <Double> pKey3JerkList=dataExtraction.OutputTemporalData.pKey3JerkList;
+	ArrayList <Double> npKey6JerkList=dataExtraction.OutputTemporalDataMain.npKey6JerkList;
+	ArrayList <Double> pKey3JerkList=dataExtraction.OutputTemporalDataMain.pKey3JerkList;
 		  
      final XYSeries np = new XYSeries( "Non-paretic Limb Trial" );
       

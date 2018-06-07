@@ -5,7 +5,7 @@
 2DFuglMeyer
 	
  */
-package ArffIO;
+package arff;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,16 +21,10 @@ import weka.core.Instances;
  *This class gets all Arff files for specific metrics and stores in arrays
  */
 public class GetAllArffsForExercise {
-	//Change these parameters to access different files
-	/*
-	 *change these parameters for each trial 
-	 */
-	static String INPUTDIR =ArffReader.INPUTFOLDER;
-	//final static String folderName="symposiumCupExercises";
-	//final static String INPUTDIR = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName+"/";
-
-	static File testMetricsDir = new File(INPUTDIR);
 	
+	static String INPUTDIR;
+	static File testMetricsDir;
+	static File[] testMetricFiles;
 	//File [] metric files contains 0 is speeds, 1 is jerkiness, 2 is disFromRef, 3 is angles
 	public static ArrayList <File> speedFiles = new ArrayList<File>();
 	public static ArrayList <File> jerkFiles = new ArrayList<File>();
@@ -38,18 +32,15 @@ public class GetAllArffsForExercise {
 	public static ArrayList <File> angleFiles = new ArrayList<File>();
 
 	
- 	//final static String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName+"/averages/";
-	//static File[] metricFiles = new File(INPUTFOLDER).listFiles();
-	
-	//list only directories and store in Files array
- 	static File[] testMetricFiles = testMetricsDir.listFiles(new FileFilter() {
+	public static void setFileLists(String dir){
+		
+		INPUTDIR=dir;//list only directories and store in Files array
+		testMetricsDir = new File(INPUTDIR);
+		testMetricFiles = testMetricsDir.listFiles(new FileFilter() {
 			    public boolean accept(File f) {
 			        return f.isDirectory();
 			    }
 			});
-		
-	
-	public static void setFileLists(){
 		
 		//System.out.println("Folders count: " + files.length);
 		

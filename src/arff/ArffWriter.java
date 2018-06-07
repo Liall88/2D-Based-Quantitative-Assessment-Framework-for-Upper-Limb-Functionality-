@@ -5,7 +5,7 @@
 2DFuglMeyer
 	
  */
-package ArffIO;
+package arff;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,17 +23,56 @@ import org.apache.commons.io.FileUtils;
  */
 public class ArffWriter {
 
-	public static void writeSingleTrialArff(int trial, String OUTPUTFOLDER, ArrayList<ArrayList<Double>> npAngList,ArrayList<ArrayList<Double>> pAngList,
-			ArrayList<ArrayList<Double>> disXList, ArrayList<ArrayList<Double>> disYList,
-			ArrayList<ArrayList<Double>> npSpeedList, ArrayList<ArrayList<Double>> pSpeedList, 
-			ArrayList<ArrayList<Double>> npJerkList, ArrayList<ArrayList<Double>> pJerkList) throws IOException {
+	public static void writeMetricsData(BufferedWriter bw, Arff arff ) throws IOException{
 		
-		//where temporal analysis arff files will be stored
-		final  String SPEEDFILE= OUTPUTFOLDER+ "speeds" +trial+".arff";
-		final  String JERKFILE = OUTPUTFOLDER + "jerkiness" +trial+".arff";
-		final  String DISFILE = OUTPUTFOLDER + "disFromRef" +trial+".arff";
-		final  String ANGFILE= OUTPUTFOLDER+ "angles" +trial+".arff";
-
+		for(int i =0; i <arff.npList.get(0).size();i++){
+			bw.write(
+			arff.npList.get(0).get(i).toString() + ","  +
+			arff.pList.get(0).get(i).toString() + "," +
+			arff.npList.get(1).get(i).toString() + "," +
+			arff.pList.get(1).get(i).toString() + "," +
+			arff.npList.get(2).get(i).toString() + ","  +
+			arff.pList.get(2).get(i).toString() + "," +
+			arff.npList.get(3).get(i).toString() + "," +
+			arff.pList.get(3).get(i).toString() + "," +
+			arff.npList.get(4).get(i).toString() + ","  +
+			arff.pList.get(4).get(i).toString() + "," +
+			arff.npList.get(5).get(i).toString() + "," +
+			arff.pList.get(5).get(i).toString() + "," +
+			arff.npList.get(6).get(i).toString() + ","  +
+			arff.npList.get(6).get(i).toString() + "," +
+			arff.npList.get(7).get(i).toString() + "," +
+			arff.npList.get(7).get(i).toString() + "," +
+			arff.WMFTClass									   +
+					 "\n"  );
+		}
+		
+	}
+		
+		public static void writeAngData(BufferedWriter bw, Arff arff) throws IOException{
+			
+			for(int i =0; i <arff.npList.get(0).size();i++){
+				bw.write(
+				arff.npList.get(0).get(i).toString() + ","  +
+				arff.pList.get(0).get(i).toString() + "," +
+				arff.npList.get(1).get(i).toString() + "," +
+				arff.pList.get(1).get(i).toString() + "," +
+				arff.npList.get(2).get(i).toString() + ","  +
+				arff.pList.get(2).get(i).toString() + "," +
+				arff.npList.get(3).get(i).toString() + "," +
+				arff.pList.get(3).get(i).toString() + "," +
+				arff.npList.get(4).get(i).toString() + ","  +
+				arff.pList.get(4).get(i).toString() + "," +
+				arff.npList.get(5).get(i).toString() + "," +
+				arff.pList.get(5).get(i).toString() + "," +
+				arff.WMFTClass									   +
+						 "\n"  );
+			}
+			
+		
+	}
+	public static void writeSingleTrialArff(String OUTPUTFOLDER, Arff speedArff, Arff angArff, Arff disArff, Arff jerkArff) throws IOException {
+		
 		//write into arff files in output directory
 		File directory = new File(OUTPUTFOLDER);
 		//System.out.println("DEBUG: 1 " + directory);
@@ -68,13 +107,13 @@ public class ArffWriter {
 
 		try {
 
-			fwSpeed = new FileWriter(SPEEDFILE);
+			fwSpeed = new FileWriter(speedArff.path);
 			bwSpeed = new BufferedWriter(fwSpeed);
-			fwJerk = new FileWriter(JERKFILE);
+			fwJerk = new FileWriter(jerkArff.path);
 			bwJerk = new BufferedWriter(fwJerk);
-			fwDis = new FileWriter(DISFILE);
+			fwDis = new FileWriter(disArff.path);
 			bwDis= new BufferedWriter(fwDis);
-			fwAng = new FileWriter(ANGFILE);
+			fwAng = new FileWriter(angArff.path);
 			bwAng= new BufferedWriter(fwAng);
 			
 			String intro = "%" + myDateString +  "\n%Project: Training a neural network in order to correctly identify motor function in the upper limbs from a 2D camera \n" +
@@ -200,97 +239,16 @@ public class ArffWriter {
 			bwAng.write(AngHeader);
 			
 			String data = "@DATA \n" ;
-			bwAng.write(data);
 			bwSpeed.write(data);
-			bwJerk.write(data);
+			bwAng.write(data);
 			bwDis.write(data);
-
-			for(int i =0; i <npSpeedList.get(0).size();i++){
-					bwSpeed.write(
-					npSpeedList.get(0).get(i).toString() + ","  +
-					pSpeedList.get(0).get(i).toString() + "," +
-					npSpeedList.get(1).get(i).toString() + "," +
-					pSpeedList.get(1).get(i).toString() + "," +
-					npSpeedList.get(2).get(i).toString() + ","  +
-					pSpeedList.get(2).get(i).toString() + "," +
-					npSpeedList.get(3).get(i).toString() + "," +
-					pSpeedList.get(3).get(i).toString() + "," +
-					npSpeedList.get(4).get(i).toString() + ","  +
-					pSpeedList.get(4).get(i).toString() + "," +
-					npSpeedList.get(5).get(i).toString() + "," +
-					pSpeedList.get(5).get(i).toString() + "," +
-					npSpeedList.get(6).get(i).toString() + ","  +
-					npSpeedList.get(6).get(i).toString() + "," +
-					npSpeedList.get(7).get(i).toString() + "," +
-					npSpeedList.get(7).get(i).toString() + "," +
-					"?"									   +
-							 "\n"  );
-				}
+			bwJerk.write(data);
 			
-			for(int i =0; i <npJerkList.get(0).size();i++){
-				bwJerk.write(
-				npJerkList.get(0).get(i).toString() + ","  +
-				pJerkList.get(0).get(i).toString() + "," +
-				npJerkList.get(1).get(i).toString() + "," +
-				pJerkList.get(1).get(i).toString() + "," +
-				npJerkList.get(2).get(i).toString() + ","  +
-				pJerkList.get(2).get(i).toString() + "," +
-				npJerkList.get(3).get(i).toString() + "," +
-				pJerkList.get(3).get(i).toString() + "," +
-				npJerkList.get(4).get(i).toString() + ","  +
-				pJerkList.get(4).get(i).toString() + "," +
-				npJerkList.get(5).get(i).toString() + "," +
-				pJerkList.get(5).get(i).toString() + "," +
-				npJerkList.get(6).get(i).toString() + ","  +
-				npJerkList.get(6).get(i).toString() + "," +
-				npJerkList.get(7).get(i).toString() + "," +
-				npJerkList.get(7).get(i).toString() + "," +
-				"?"									   +
-						 "\n"  );
-			}
-			
-			
-			for(int i =0; i <disXList.get(0).size();i++){
-				bwDis.write(
-				disXList.get(0).get(i).toString() + "," +
-				disYList.get(0).get(i).toString() + "," +
-				disXList.get(1).get(i).toString() + "," +
-				disYList.get(1).get(i).toString() + "," +
-				disXList.get(2).get(i).toString() + "," +
-				disYList.get(2).get(i).toString() + "," +
-				disXList.get(3).get(i).toString() + "," +
-				disYList.get(3).get(i).toString() + "," +
-				disXList.get(4).get(i).toString() + "," +
-				disYList.get(4).get(i).toString() + "," +
-				disXList.get(5).get(i).toString() + "," +
-				disYList.get(5).get(i).toString() + "," +
-				disXList.get(6).get(i).toString() + "," +
-				disYList.get(6).get(i).toString() + "," +
-				disXList.get(7).get(i).toString() + "," +
-				disYList.get(7).get(i).toString() + "," +
-				"?"										+
-						 "\n"  );
-			}
-			
-			for(int i =0; i <npAngList.get(0).size();i++){
-				bwAng.write(
-				npAngList.get(0).get(i).toString() + "," +
-				pAngList.get(0).get(i).toString() + "," +
-				npAngList.get(1).get(i).toString() + "," +
-				pAngList.get(1).get(i).toString() + "," +
-				npAngList. get(2).get(i).toString() + "," +
-				pAngList.get(2).get(i).toString() + "," +
-				npAngList.get(3).get(i).toString() + "," +
-				pAngList.get(3).get(i).toString() + "," +
-				npAngList. get(4).get(i).toString() + "," +
-				pAngList. get(4).get(i).toString() + "," +
-				npAngList.get(5).get(i).toString() + "," +
-				pAngList.get(5).get(i).toString() + "," +
-				"?"										   +
-				 "\n"  );
-			}
-			
-				System.out.println("Done Writing Data to Files");
+			writeMetricsData(bwSpeed,speedArff);
+			writeAngData(bwAng,angArff);
+			writeMetricsData(bwDis,disArff);
+			writeMetricsData(bwJerk,jerkArff);			
+			System.out.println("Done Writing Data to Files");
 
 			} catch (IOException e) {
 

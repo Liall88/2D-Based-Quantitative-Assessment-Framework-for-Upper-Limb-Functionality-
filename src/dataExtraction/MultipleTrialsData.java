@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class MultipleTrialsData {
 	//number of trials 
-	final int trialNum = OutputTemporalData.numOfTests;
+	final int trialNum = OutputTemporalDataMain.numOfTests;
 	
 	//ArrayLists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
 	public static ArrayList<ArrayList<Double>> npAngAvrgList = new ArrayList<ArrayList<Double>>();

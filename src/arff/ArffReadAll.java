@@ -5,7 +5,7 @@
 2DFuglMeyer
 	
  */
-package ArffIO;
+package arff;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,8 +30,9 @@ import weka.core.converters.ArffLoader;
 /**
  * @author la2817
  *
+ *This class reads all Arffs in a directory and stores them in arrays of Arff files
  */
-public class ArffReader {
+public class ArffReadAll {
 	 
 	/**
 	 * Return the data set loaded from the Arff file at @param path
@@ -40,33 +41,35 @@ public class ArffReader {
 	/*
 	 *change these parameters for each trial to generate arff files of kinematic features	
 	 */
-	public static final int trial=0; 	
-	final static String folderName="symposiumCupExercises";
-	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
-	final static String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/";
 	/*
 	 *	
 	 */
-
-	//where temporal analysis arff files will be stored
-	final static String SPEEDFILE= INPUTFOLDER+ "speeds" +trial+".arff";
-	final static String JERKFILE = INPUTFOLDER + "jerkiness" +trial+".arff";
-	final static String DISFILE =  INPUTFOLDER+ "disFromRef" +trial+".arff";
-	final static String ANGFILE= INPUTFOLDER+ "angles" +trial+".arff";
+	//Araylists of Arff objects for each trial
+	static ArrayList<Arff> speedArffs;
+	static ArrayList<Arff> angleArffs;
+	static ArrayList<Arff> disArffs;
+	static ArrayList<Arff> jerkArffs;
 	
 	
-	//2D arrays for each metric and their contents in String [] format
+	//2D arrays for each metric file read and their contents in String [] format
 	static ArrayList<ArrayList<String[]>> jerkMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	static ArrayList<ArrayList<String[]>> speedMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	static ArrayList<ArrayList<String[]>> angleMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	static ArrayList<ArrayList<String[]>> disFromRefMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	
+	//Data Structures for values extracted from ARFF Files:
+	//WMFT Class
+	
+
+	
+  //Arraylists For each Arff Object
 	//ArrayLists of data read from Arff Files2D arrays for each metric and their contents in String [] format
 	//2D arrays that contain arraylists of data for each keypoint(0-7)
+	
 	public static ArrayList<ArrayList<Double>> extnpAngList = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<ArrayList<Double>> extpAngList = new ArrayList<ArrayList<Double>>();
 
-	public static ArrayList<Double> npAng0List = new ArrayList<Double>();
+	/*public static ArrayList<Double> npAng0List = new ArrayList<Double>();
 	public static ArrayList<Double> npAng1List = new ArrayList<Double>();
 	public static ArrayList<Double> npAng2List = new ArrayList<Double>();
 	public static ArrayList<Double> npAng3List = new ArrayList<Double>();
@@ -78,26 +81,25 @@ public class ArffReader {
 	public static ArrayList<Double> pAng2List = new ArrayList<Double>();
 	public static ArrayList<Double> pAng3List = new ArrayList<Double>();
 	public static ArrayList<Double> pAng4List = new ArrayList<Double>();
-	public static ArrayList<Double> pAng5List = new ArrayList<Double>();
-	
+	public static ArrayList<Double> pAng5List = new ArrayList<Double>();*/
 	
 	//reference trajectory taken from non-paretic arm 
 
-	public static ArrayList<Keypoint> refTrajKey0= new ArrayList<Keypoint>();
+	/*public static ArrayList<Keypoint> refTrajKey0= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey1= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey2= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey3= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey4= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey5= new ArrayList<Keypoint>();
 	public static ArrayList<Keypoint> refTrajKey6= new ArrayList<Keypoint>();
-	public static ArrayList<Keypoint> refTrajKey7= new ArrayList<Keypoint>();
+	public static ArrayList<Keypoint> refTrajKey7= new ArrayList<Keypoint>();*/
 	
 	//distances of keypoint in terms of x,y coordinates from reference trajectory Keypoints
 	public static ArrayList<ArrayList<Double>> extdisXList= new ArrayList<ArrayList<Double>>(); ;
 	public static ArrayList<ArrayList<Double>> extdisYList= new ArrayList<ArrayList<Double>>(); ;
 
 
-	public static ArrayList<Double> disKey0X= new ArrayList<Double>();
+	/*public static ArrayList<Double> disKey0X= new ArrayList<Double>();
 	public static ArrayList<Double> disKey0Y= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1X= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1Y= new ArrayList<Double>();
@@ -112,26 +114,27 @@ public class ArffReader {
 	public static ArrayList<Double> disKey6X= new ArrayList<Double>();
 	public static ArrayList<Double> disKey6Y= new ArrayList<Double>();
 	public static ArrayList<Double> disKey7X= new ArrayList<Double>();
-	public static ArrayList<Double> disKey7Y= new ArrayList<Double>();
+	public static ArrayList<Double> disKey7Y= new ArrayList<Double>();*/
+	
 	
 	//normalised distances of keypoint from reference trajectory
 	public static ArrayList<ArrayList<Double>> extdisNormList= new ArrayList<ArrayList<Double>>(); ;
 
-	public static ArrayList<Double> disKey0Norm= new ArrayList<Double>();
+	/*public static ArrayList<Double> disKey0Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey1Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey2Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey3Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey4Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey5Norm= new ArrayList<Double>();
 	public static ArrayList<Double> disKey6Norm= new ArrayList<Double>();
-	public static ArrayList<Double> disKey7Norm= new ArrayList<Double>();
+	public static ArrayList<Double> disKey7Norm= new ArrayList<Double>();*/
 	
 	
 	//speed  of keypoints in terms of pixel per frame between skeletons
 	public static ArrayList<ArrayList<Double>> extnpSpeedList= new ArrayList<ArrayList<Double>>(); ;
 	public static ArrayList<ArrayList<Double>> extpSpeedList= new ArrayList<ArrayList<Double>>(); ;
 	
-	public static ArrayList<Double> npKey0SpeedList= new ArrayList<Double>();
+	/*public static ArrayList<Double> npKey0SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey1SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey2SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey3SpeedList= new ArrayList<Double>();
@@ -147,13 +150,13 @@ public class ArffReader {
 	public static ArrayList<Double> pKey4SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> pKey5SpeedList= new ArrayList<Double>();
 	public static ArrayList<Double> pKey6SpeedList= new ArrayList<Double>();
-	public static ArrayList<Double> pKey7SpeedList= new ArrayList<Double>();
+	public static ArrayList<Double> pKey7SpeedList= new ArrayList<Double>();*/
 
 	//jerk (or smoothness) of keypoints
 	public static ArrayList<ArrayList<Double>> extnpJerkList= new ArrayList<ArrayList<Double>>(); ;
 	public static ArrayList<ArrayList<Double>> extpJerkList= new ArrayList<ArrayList<Double>>(); ;
 	
-	public static ArrayList<Double> npKey0JerkList= new ArrayList<Double>();
+	/*public static ArrayList<Double> npKey0JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey1JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey2JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> npKey3JerkList= new ArrayList<Double>();
@@ -169,7 +172,7 @@ public class ArffReader {
 	public static ArrayList<Double> pKey4JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> pKey5JerkList= new ArrayList<Double>();
 	public static ArrayList<Double> pKey6JerkList= new ArrayList<Double>();
-	public static ArrayList<Double> pKey7JerkList= new ArrayList<Double>();
+	public static ArrayList<Double> pKey7JerkList= new ArrayList<Double>();*/
 
 
 	public static void searchFileAndSaveStringRows( File file, ArrayList<String[]> rowList){	//searches for term @DATA and starts reading after that line
@@ -222,25 +225,7 @@ public class ArffReader {
 		}
 	}	
 	
-	public static void valueExtractor( String [] row,ArrayList<String[]> valList){// extracts each value/attribute of each row of the arff file
-		//split file into columns by commas
-		//BufferedReader br = new BufferedReader(new FileReader("C:\\readFile.txt"));
-		//String line = br.readLine();
-		int count =0;
-		//row.
-		//while(sc.hasNextLine()){
-		//String line =sc.nextLine();
-    	//System.out.println("DEBUG Next line:"+line);
-		//String[] row = line.split("");
-		//String[] lineTemp = line.split("\\r?\\n");//split each line
-		//rowList.add(lineTemp);
-		//String [] valueTemp =line.split(","); //split each value
-		//valList.add(valueTemp);
-		System.out.println("DEBUG:  ValList: "+valList.get(0));
-		//System.out.println("Row" + count + "  : " + rows[count]);
-		count++;
-		}
-	//}	
+	
 	
 	
 	public static void  setMetricFilesRows(ArrayList <File> speedFiles,ArrayList <File> jerkFiles, ArrayList <File> disFromRefFiles,ArrayList <File> angleFiles ){
@@ -284,79 +269,140 @@ public class ArffReader {
 		
 	}
 	
-	public static void setMultiArrays(){
-			
-			extnpAngList.add(npAng0List);extpAngList.add(pAng0List);
-			extnpAngList.add(npAng1List);extpAngList.add(pAng1List);
-			extnpAngList.add(npAng2List);extpAngList.add(pAng2List);
-			extnpAngList.add(npAng3List);extpAngList.add(pAng3List);
-			extnpAngList.add(npAng4List);extpAngList.add(pAng4List);
-			extnpAngList.add(npAng5List);extpAngList.add(pAng5List);
-	
-			extdisXList.add(disKey0X);extdisYList.add(disKey0Y);
-			extdisXList.add(disKey1X);extdisYList.add(disKey1Y);
-			extdisXList.add(disKey2X);extdisYList.add(disKey2Y);
-			extdisXList.add(disKey3X);extdisYList.add(disKey3Y);
-			extdisXList.add(disKey4X);extdisYList.add(disKey4Y);
-			extdisXList.add(disKey5X);extdisYList.add(disKey5Y);
-			extdisXList.add(disKey6X);extdisYList.add(disKey6Y);
-			extdisXList.add(disKey7X);extdisYList.add(disKey7Y);
-	
-			extnpSpeedList.add(npKey0SpeedList);extpSpeedList.add(pKey0SpeedList);
-			extnpSpeedList.add(npKey1SpeedList);extpSpeedList.add(pKey1SpeedList);
-			extnpSpeedList.add(npKey2SpeedList);extpSpeedList.add(pKey2SpeedList);
-			extnpSpeedList.add(npKey3SpeedList);extpSpeedList.add(pKey3SpeedList);
-			extnpSpeedList.add(npKey4SpeedList);extpSpeedList.add(pKey4SpeedList);
-			extnpSpeedList.add(npKey5SpeedList);extpSpeedList.add(pKey5SpeedList);
-			extnpSpeedList.add(npKey6SpeedList);extpSpeedList.add(pKey6SpeedList);
-			extnpSpeedList.add(npKey7SpeedList);extpSpeedList.add(pKey7SpeedList);
-	
-			extnpJerkList.add(npKey0JerkList);extpJerkList.add(pKey0JerkList);
-			extnpJerkList.add(npKey1JerkList);extpJerkList.add(pKey1JerkList);
-			extnpJerkList.add(npKey2JerkList);extpJerkList.add(pKey2JerkList);
-			extnpJerkList.add(npKey3JerkList);extpJerkList.add(pKey3JerkList);
-			extnpJerkList.add(npKey4JerkList);extpJerkList.add(pKey4JerkList);
-			extnpJerkList.add(npKey5JerkList);extpJerkList.add(pKey5JerkList);
-			extnpJerkList.add(npKey6JerkList);extpJerkList.add(pKey6JerkList);
-			extnpJerkList.add(npKey7JerkList);extpJerkList.add(pKey7JerkList);
-			
-		}
-	public static void setExtSetLists(ArrayList<ArrayList<String[]>> metricsFilesRows,ArrayList<Double>npKey0,
-		ArrayList<Double>npKey1,ArrayList<Double>npKey2,ArrayList<Double>npKey3,
-		ArrayList<Double>npKey4,ArrayList<Double>npKey5,ArrayList<Double>npKey6,
-		ArrayList<Double>npKey7,ArrayList<Double>pKey0,
-		ArrayList<Double>pKey1,ArrayList<Double>pKey2,ArrayList<Double>pKey3,
-		ArrayList<Double>pKey4,ArrayList<Double>pKey5,ArrayList<Double>pKey6,
-		ArrayList<Double>pKey7){
-	
-		for(int i =0;i< metricsFilesRows.size();i++){
-			for(int j=0;j <metricsFilesRows.get(j).size(); j++){
+	//sets all arraylists for each keypoint
+	public static ArrayList<Arff> getArffList(String Path,ArrayList<ArrayList<String[]>> metricsFilesRows,ArrayList<Arff> arffList ){
+		
+		String path =Path;
+		String WMFTclass;
+		ArrayList<Double> npKey0=new ArrayList<Double>();
+		ArrayList<Double>npKey1=new ArrayList<Double>();
+		ArrayList<Double>npKey2=new ArrayList<Double>();
+		ArrayList<Double>npKey3=new ArrayList<Double>();
+		ArrayList<Double>npKey4=new ArrayList<Double>();
+		ArrayList<Double>npKey5=new ArrayList<Double>();
+		ArrayList<Double>npKey6=new ArrayList<Double>();
+		ArrayList<Double>npKey7=new ArrayList<Double>();
+		ArrayList<Double>pKey0=new ArrayList<Double>();
+		ArrayList<Double>pKey1=new ArrayList<Double>();
+		ArrayList<Double>pKey2=new ArrayList<Double>();
+		ArrayList<Double>pKey3=new ArrayList<Double>();
+		ArrayList<Double>pKey4=new ArrayList<Double>();
+		ArrayList<Double>pKey5=new ArrayList<Double>();
+		ArrayList<Double>pKey6=new ArrayList<Double>();
+		ArrayList<Double>pKey7=new ArrayList<Double>();
+		
+		for(int i =0;i< metricsFilesRows.size();i++){//metric file for each trial
+			//System.out.println("DEBUG: metricsFilesRows.size()" +metricsFilesRows.size());				
+			//System.out.println("DEBUG: metricsFilesRows.get(i)" +metricsFilesRows.get(i));
+			for(int j=0;j <metricsFilesRows.get(i).size(); j++){//ArrayList of String[] for each line
+				//System.out.println("DEBUG: metricsFilesRows.get(i).size()" +metricsFilesRows.get(i).size());
 				//valueExtractor(metricsFilesRows.get(i));
-				System.out.println("DEBUG: metricsFilesRows.geti.getj.[0 "+ metricsFilesRows.get(i).get(j)[0]);//row string []
+				//System.out.println("DEBUG: metricsFilesRows.geti.getj.[0]: "+ metricsFilesRows.get(i).get(j)[0]);//row string 
+				String[] tempRow = metricsFilesRows.get(i).get(j)[0].split(",");
+				//for (int k=0; k <tempRow.length; k++){
+					//System.out.println("DEBUG:tempRow " + tempRow[k]);//row string 
+					npKey0.add(Double.parseDouble(tempRow[0]));
+					npKey1.add(Double.parseDouble(tempRow[1]));
+					npKey2.add(Double.parseDouble(tempRow[2]));
+					npKey3.add(Double.parseDouble(tempRow[3]));
+					npKey4.add(Double.parseDouble(tempRow[4]));
+					npKey5.add(Double.parseDouble(tempRow[5]));
+					npKey6.add(Double.parseDouble(tempRow[6]));
+					npKey7.add(Double.parseDouble(tempRow[7]));
+					pKey0.add(Double.parseDouble(tempRow[8]));
+					pKey1.add(Double.parseDouble(tempRow[9]));
+					pKey2.add(Double.parseDouble(tempRow[10]));
+					pKey3.add(Double.parseDouble(tempRow[11]));
+					pKey4.add(Double.parseDouble(tempRow[12]));
+					pKey5.add(Double.parseDouble(tempRow[13]));
+					pKey6.add(Double.parseDouble(tempRow[14]));
+					pKey7.add(Double.parseDouble(tempRow[15]));
+					WMFTclass =tempRow[16];
+				//}
 				
+				ArrayList<ArrayList<Double>> extractNPList= setMultiArrays(npKey0,npKey1,npKey2,npKey3,npKey4,npKey5,npKey6,npKey7);
+				ArrayList<ArrayList<Double>> extractPList= setMultiArrays(pKey0,pKey1,pKey2,pKey3,pKey4,pKey5,pKey6,pKey7);
+				arffList.add(new Arff(path,WMFTclass,extractNPList,extractPList));
+				}
 			}
-			
-			
-		
-	}
-		
-	}
+		return arffList;
+		}
+	
+	//sets 2D arraylists holding arraylists of each keypoint
 
-	public static void main (String[] args) throws IOException{
+	//for angle
+	public static ArrayList<ArrayList<Double>> setMultiArrays( ArrayList<Double>Key0,ArrayList<Double>Key1,ArrayList<Double>Key2,
+			ArrayList<Double>Key3,ArrayList<Double>Key4,ArrayList<Double>Key5){
+		ArrayList<ArrayList<Double>> multiList = new ArrayList<ArrayList<Double>>();
+		multiList.add(Key0);
+		multiList.add(Key1);
+		multiList.add(Key2);
+		multiList.add(Key3);
+		multiList.add(Key4);
+		multiList.add(Key5);
+		
+		return multiList;
+	}
+	//for speed,jerk, dis
+	public static ArrayList<ArrayList<Double>> setMultiArrays( ArrayList<Double>Key0,ArrayList<Double>Key1,ArrayList<Double>Key2,
+			ArrayList<Double>Key3,ArrayList<Double>Key4,ArrayList<Double>Key5,ArrayList<Double>Key6,
+			ArrayList<Double>Key7){
+		ArrayList<ArrayList<Double>> multiList = new ArrayList<ArrayList<Double>>();
+		multiList.add(Key0);
+		multiList.add(Key1);
+		multiList.add(Key2);
+		multiList.add(Key3);
+		multiList.add(Key4);
+		multiList.add(Key5);
+		multiList.add(Key6);
+		multiList.add(Key7);
+	
+		return multiList;
+	}
+	
+	public static void readAllARFFs(String folder){//reads all arff Files in a directory and sets a File List for each metric
 		//loadDataFromArffFile(SPEEDFILE); 
 		//loadDataFromArffFile(JERKFILE); //works
 		// contains each row of a file in String []
 		
-		GetAllArffsForExercise.setFileLists();
+		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
+		GetAllArffsForExercise.setFileLists(folder);
 		ArrayList <File> speedFiles = GetAllArffsForExercise.speedFiles;
+		System.out.println("DEBUG: speedFiles.size"+speedFiles.size());
 		ArrayList <File> jerkFiles = GetAllArffsForExercise.jerkFiles;
+		System.out.println("DEBUG: jerkFiles.size"+jerkFiles.size());
+
 		ArrayList <File> disFromRefFiles = GetAllArffsForExercise.disFromRefFiles;
+		System.out.println("DEBUG: disFromRef.size"+disFromRefFiles.size());
+
 		ArrayList <File> angleFiles = GetAllArffsForExercise.angleFiles;
 		setMetricFilesRows(speedFiles,jerkFiles,disFromRefFiles,angleFiles);
-			
-		setExtSetLists(jerkMetricsFilesRows,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList,
-				pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
+		System.out.println("DEBUG: anglesFiles.size"+angleFiles.size());
+
+	}
+	
+	public static ArrayList<Arff> getJerkArffs(String INPUTFOLDER){
+		readAllARFFs(INPUTFOLDER);
+		ArrayList<Arff> jerkArffList=getArffList(INPUTFOLDER,jerkMetricsFilesRows,jerkArffs);
 		//System.out.println("DEBUG: metricsFilesRows.get 0.get 5"+ jerkMetricsFilesRows.get(0).get(5));
+		
+		ArrayList<Arff> jArff = new ArrayList<Arff>();
+		return jArff;
+		
+	}
+	
+	
+	
+	
+	public static void main (String[] args) throws IOException{
+		String folderName="symposiumCupExercises";
+		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
+		String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/";
+		ArrayList<Arff> jArffs=getJerkArffs(INPUTFOLDER);
+		System.out.println("DEBUG jArffs.size()"+ jArffs.size());
+			
+	}	
+		  
 
 		
 		/*for (int i =0; i <jerkFiles.size(); i++){
@@ -384,7 +430,7 @@ public class ArffReader {
 		//String[] columns = line.split(" ");
 
 
-	}
+	
 	
 	
 	public static Instances loadDataFromArffFile(String path) throws IOException{

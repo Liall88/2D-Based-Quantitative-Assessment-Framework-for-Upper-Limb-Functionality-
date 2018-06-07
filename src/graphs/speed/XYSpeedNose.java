@@ -25,11 +25,11 @@ public class XYSpeedNose {
 
    public static void main( String[ ] args )throws Exception {
 	
-	dataExtraction.OutputTemporalData.main(args);
-	int trial = dataExtraction.OutputTemporalData.trial;
+	dataExtraction.OutputTemporalDataMain.main(args);
+	int trial = dataExtraction.OutputTemporalDataMain.trial;
 	
-	ArrayList <Double> npKey0SpeedList=dataExtraction.OutputTemporalData.npKey0SpeedList;
-	ArrayList <Double> pKey0SpeedList=dataExtraction.OutputTemporalData.pKey0SpeedList;
+	ArrayList <Double> npKey0SpeedList=dataExtraction.OutputTemporalDataMain.npKey0SpeedList;
+	ArrayList <Double> pKey0SpeedList=dataExtraction.OutputTemporalDataMain.pKey0SpeedList;
 		  
      final XYSeries np = new XYSeries( "Non-paretic Limb Trial" );
       
