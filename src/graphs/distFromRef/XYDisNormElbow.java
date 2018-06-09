@@ -25,10 +25,10 @@ public class XYDisNormElbow {
 
    public static void main( String[ ] args )throws Exception {
 	
-	dataExtraction.OutputTemporalDataMain.main(args);
-	int trial = dataExtraction.OutputTemporalDataMain.trial;
+	dataExtraction.MakeSingleTrialMetricArffs.main(args);
+	int trial = dataExtraction.MakeSingleTrialMetricArffs.trial;
 	
-	ArrayList <Double> disKey3Norm=dataExtraction.OutputTemporalDataMain.disKey3Norm;
+	ArrayList <Double> disKey3Norm=dataExtraction.MakeSingleTrialMetricArffs.disKey3Norm;
 		  
      final XYSeries xDis = new XYSeries( "paretic Limb Trial" );
       

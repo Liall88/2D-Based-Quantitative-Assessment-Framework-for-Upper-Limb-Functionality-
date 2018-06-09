@@ -18,19 +18,53 @@ import weka.core.Instances;
 /**
  * @author la2817
  *
- *This class gets all Arff files for specific metrics and stores in arrays
+ *This class gets all Arff files for metrics and stores in Arraylists <File>
  */
 public class GetAllArffsForExercise {
 	
 	static String INPUTDIR;
 	static File testMetricsDir;
 	static File[] testMetricFiles;
-	//File [] metric files contains 0 is speeds, 1 is jerkiness, 2 is disFromRef, 3 is angles
-	public static ArrayList <File> speedFiles = new ArrayList<File>();
-	public static ArrayList <File> jerkFiles = new ArrayList<File>();
-	public static ArrayList <File> disFromRefFiles = new ArrayList<File>();
-	public static ArrayList <File> angleFiles = new ArrayList<File>();
+	//File [] metric files contains 0 is NPspeeds, 1 is NPjerkiness, 2 is Xdis, 3 is NPangles
+	private static ArrayList <File> npspeedFiles = new ArrayList<File>();
+	private static ArrayList <File> npjerkFiles = new ArrayList<File>();
+	private static ArrayList <File> xdisFiles = new ArrayList<File>();
+	private static ArrayList <File> npangleFiles = new ArrayList<File>();
+	//File [] metric files contains 4 is Pspeeds, 5 is Pjerkiness, 6 is Ydis, 7 is Pangles
 
+	public static ArrayList <File> pspeedFiles = new ArrayList<File>();
+	public static ArrayList <File> pjerkFiles = new ArrayList<File>();
+	public static ArrayList <File> ydisFiles = new ArrayList<File>();
+	public static ArrayList <File> pangleFiles = new ArrayList<File>();
+
+
+	public static ArrayList<File> getNPSpeedFiles(){
+		return npspeedFiles;
+	}
+	public static  ArrayList<File> getNPAngFiles(){
+		return npangleFiles;
+	}
+	public static ArrayList<File> getXDisFiles(){
+		return xdisFiles;
+	}
+	
+	public static ArrayList<File> getNPJerkFiles(){
+		return npjerkFiles;
+	}
+	public static ArrayList<File> getPSpeedFiles(){
+		return pspeedFiles;
+	}
+	public static ArrayList<File> getPAngFiles(){
+		return pangleFiles;
+	}
+	public static ArrayList<File> getYDisFiles(){
+		return ydisFiles;
+	}
+	
+	public static ArrayList<File> getPJerkFiles(){
+		return pjerkFiles;
+	}
+	
 	
 	public static void setFileLists(String dir){
 		
@@ -53,31 +87,28 @@ public class GetAllArffsForExercise {
 			String INPUTFOLDER = INPUTDIR +"test"+i+"Metrics" + "/";
 			File [] metricFiles = new File(INPUTFOLDER).listFiles();
 			//for(int j=0; j<metricFiles.length;j++){
-				//System.out.println("DEBUG: Metric Files"+ metricFiles[j].getAbsolutePath());
-				speedFiles.add(metricFiles[0]);
-				jerkFiles.add(metricFiles[1]);
-				disFromRefFiles.add(metricFiles[2]);
-				angleFiles.add(metricFiles[3]);
-				//make a File array of each testMetricFiles
-			//}
-			//speedFiles.add(testMetricFiles[i].listFiles());
-			
-			/*for(int k=0; k <10;k++){
-			System.out.println("DEBUG: speedFiles:"+ speedFiles.get(i));
-			System.out.println("DEBUG: jerkFiles:"+ jerkFiles.get(i));
-			System.out.println("DEBUG: anglesFiles:"+ angleFiles.get(i));
-			System.out.println("DEBUG: disFromRefFiles:"+ disFromRefFiles.get(i));
-			}*/
-				
-			//System.out.println("DEBUG" + speedFiles.size());
+				//System.out.println("DEBUG: Metric Files 0"+ metricFiles[0].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 1"+ metricFiles[1].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 2"+ metricFiles[2].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 3"+ metricFiles[3].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 4"+ metricFiles[4].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 5"+ metricFiles[5].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 6"+ metricFiles[6].getAbsolutePath());
+				//System.out.println("DEBUG: Metric Files 7"+ metricFiles[7].getAbsolutePath());
+
+				npspeedFiles.add(metricFiles[0]);
+				npangleFiles.add(metricFiles[1]);				
+				xdisFiles.add(metricFiles[2]);
+				npjerkFiles.add(metricFiles[3]);
+
+				pspeedFiles.add(metricFiles[4]);				
+				pangleFiles.add(metricFiles[5]);
+				ydisFiles.add(metricFiles[6]);
+				pjerkFiles.add(metricFiles[7]);
+
 		}
 			
-		/*for (int i =0;i <speedFiles.size();i++){
-			System.out.println("DEBUG: speedFiles:"+i+ " : "+ speedFiles.get(i));
-			System.out.println("DEBUG: jerkFiles:"+i+ " : "+  jerkFiles.get(i));
-			System.out.println("DEBUG: disFromRefFiles:"+i+ " : "+  disFromRefFiles.get(i));
-			System.out.println("DEBUG: angles:"+ i+ " : "+ angleFiles.get(i));
-		}*/
+		
 			
 		}
 		//String INPUTFOLDER = INPUTDIR +"test"+trial+"Metrics" + "/";
@@ -88,11 +119,14 @@ public class GetAllArffsForExercise {
 		
 	
 		
-		//public static void main (String [] args) {
+		public static void main (String [] args) {
 			//System.out.println("DEBUG: InputDIR2 " +INPUTDIR2);
-			//setFileLists();
+			String folderName="symposiumCupExercises";
+			//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
+			String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/";
+			setFileLists(INPUTFOLDER);
 				
-		//}
+		}
 
 
 }

@@ -25,11 +25,11 @@ public class XYJerkNose {
 
    public static void main( String[ ] args )throws Exception {
 	
-	dataExtraction.OutputTemporalDataMain.main(args);
-	int trial = dataExtraction.OutputTemporalDataMain.trial;
+	dataExtraction.MakeSingleTrialMetricArffs.main(args);
+	int trial = dataExtraction.MakeSingleTrialMetricArffs.trial;
 	
-	ArrayList <Double> npKey0JerkList=dataExtraction.OutputTemporalDataMain.npKey0JerkList;
-	ArrayList <Double> pKey0JerkList=dataExtraction.OutputTemporalDataMain.pKey0JerkList;
+	ArrayList <Double> npKey0JerkList=dataExtraction.MakeSingleTrialMetricArffs.npKey0JerkList;
+	ArrayList <Double> pKey0JerkList=dataExtraction.MakeSingleTrialMetricArffs.pKey0JerkList;
 		  
      final XYSeries np = new XYSeries( "Non-paretic Limb Trial" );
       

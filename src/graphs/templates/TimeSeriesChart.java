@@ -25,7 +25,7 @@ import org.jfree.chart.ChartUtilities;
 public class TimeSeriesChart {
    
    public static void main( final String[ ] args )throws Exception {
-	  dataExtraction.OutputTemporalDataMain.main(args);
+	  dataExtraction.MakeSingleTrialMetricArffs.main(args);
 	  
       final TimeSeries series = new TimeSeries( "Random Data" );
       Second current = new Second();

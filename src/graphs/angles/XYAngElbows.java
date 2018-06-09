@@ -25,11 +25,11 @@ public class XYAngElbows {
 
    public static void main( String[ ] args )throws Exception {
 	
-	   dataExtraction.OutputTemporalDataMain.main(args);
-		int trial = dataExtraction.OutputTemporalDataMain.trial;
+	   dataExtraction.MakeSingleTrialMetricArffs.main(args);
+		int trial = dataExtraction.MakeSingleTrialMetricArffs.trial;
 		
-		ArrayList <Double> pAng2List=dataExtraction.OutputTemporalDataMain.npAng2List;
-		ArrayList <Double> npAng5List=dataExtraction.OutputTemporalDataMain.pAng5List;
+		ArrayList <Double> pAng2List=dataExtraction.MakeSingleTrialMetricArffs.npAng2List;
+		ArrayList <Double> npAng5List=dataExtraction.MakeSingleTrialMetricArffs.pAng5List;
 			  
 	     final XYSeries p = new XYSeries( "paretic Limb Trial" );
 	      

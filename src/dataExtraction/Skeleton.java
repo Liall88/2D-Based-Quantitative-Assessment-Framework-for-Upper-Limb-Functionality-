@@ -186,19 +186,19 @@ public class Skeleton {
 	}
 	
 	
-	 public static void main(String[] args) throws IOException, ParseException {
-	        // test program 
+	 /*public static void main(String[] args) throws IOException, ParseException {
+	         test program 
 		 	String jsonFrame ="/homes/la2817/Desktop/openPose_outputs/nptest1.json/000000000000_keypoints.json"; //path to frame
 		 	
 		 	Skeleton spooky = new Skeleton(jsonFrame);
 		 	
 		 	
-		 /*	double ang0 = Math.toDegrees(spooky.setAngles(spooky.key0, spooky.key1, spooky.key2));
+		 	double ang0 = Math.toDegrees(spooky.setAngles(spooky.key0, spooky.key1, spooky.key2));
 		 	double ang1 = Math.toDegrees(spooky.setAngles(spooky.key1, spooky.key2, spooky.key3));
 		 	double ang2 = Math.toDegrees(spooky.setAngles(spooky.key2, spooky.key3, spooky.key4));
 			double ang3 = Math.toDegrees(spooky.setAngles(spooky.key1, spooky.key5, spooky.key6));
 			double ang4 = Math.toDegrees(spooky.setAngles(spooky.key5, spooky.key6, spooky.key7));
-		*/
+		
 			System.out.println("skeletal keypoints:");
 			System.out.println("key 0 :" + spooky.key0.x + " " + spooky.key0.y+ " "+ spooky.key0.con);
 			System.out.println("key 1 :" + spooky.key1.x + " " + spooky.key1.y + " "+ spooky.key1.con);
@@ -222,7 +222,7 @@ public class Skeleton {
 			System.out.println("Angle5:");
 			System.out.println(spooky.ang5);
 				 	
-	 }
+	 }*/
 	
 }
 

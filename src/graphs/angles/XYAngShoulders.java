@@ -25,13 +25,13 @@ public class XYAngShoulders {
 
    public static void main( String[ ] args )throws Exception {
 	
-	    boolean pIsR = dataExtraction.OutputTemporalDataMain.pIsRight;
+	    boolean pIsR = dataExtraction.MakeSingleTrialMetricArffs.pIsRight;
 	    
-	    dataExtraction.OutputTemporalDataMain.main(args);
-		int trial = dataExtraction.OutputTemporalDataMain.trial;
+	    dataExtraction.MakeSingleTrialMetricArffs.main(args);
+		int trial = dataExtraction.MakeSingleTrialMetricArffs.trial;
 		
-		ArrayList <Double> pAng1List=dataExtraction.OutputTemporalDataMain.pAng1List;
-		ArrayList <Double> npAng4List=dataExtraction.OutputTemporalDataMain.npAng4List;
+		ArrayList <Double> pAng1List=dataExtraction.MakeSingleTrialMetricArffs.pAng1List;
+		ArrayList <Double> npAng4List=dataExtraction.MakeSingleTrialMetricArffs.npAng4List;
 			  
 	     final XYSeries p = new XYSeries( "paretic Limb Trial" );
 	      
