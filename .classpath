@@ -29,5 +29,11 @@
 	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/weka.jar"/>
 	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/remoteExperimentServer.jar"/>
 	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/weka-3-8-2/datasets-UCI.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-math3-3.6.1/commons-math3-3.6.1-tools.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-math3-3.6.1/commons-math3-3.6.1-test-sources.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-math3-3.6.1/commons-math3-3.6.1-tests.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-math3-3.6.1/commons-math3-3.6.1-sources.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-math3-3.6.1/commons-math3-3.6.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/homes/la2817/Desktop/javalibs/commons-math3-3.6.1/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

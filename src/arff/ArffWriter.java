@@ -26,10 +26,10 @@ public class ArffWriter {
 	
 public static void writeMetricsData(BufferedWriter bw, Arff arff, int keyNum ) throws IOException{
 		
-		for(int i =0; i <arff.list.get(0).size();i++){
+		for(int i =0; i <arff.multilist.get(0).size();i++){
 			for(int j =0; j<keyNum;j++){
 				bw.write(
-				arff.list.get(j).get(i).toString() + ","  );
+				arff.multilist.get(j).get(i).toString() + ","  );
 				//arff.list.get(j).get(i).toString() + "," );
 			}
 		bw.write(arff.WMFTClass+"\n");
@@ -38,13 +38,14 @@ public static void writeMetricsData(BufferedWriter bw, Arff arff, int keyNum ) t
 
 	public static void cleanOutputDirectory (String OUTPUTFOLDER) throws IOException{
 		File directory = new File(OUTPUTFOLDER);
-		//System.out.println("DEBUG: 1 " + directory);
-		//System.out.println("DEBUG:2 " + directory.list());
+		System.out.println("DEBUG: 1 " + directory.getAbsolutePath());
+		System.out.println("DEBUG:2 " + directory.list());
 	
 	    if (! directory.exists()){
 			System.out.println("DEBUG:Directory does not exist");
-	
-	        directory.mkdir();
+	        directory.mkdirs();
+			System.out.println("DEBUG:new Directory Made");
+
 	        // If you require it to make the entire directory path including parents,
 	        // use directory.mkdirs(); here instead.
 	    }

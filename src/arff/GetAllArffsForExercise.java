@@ -30,12 +30,16 @@ public class GetAllArffsForExercise {
 	private static ArrayList <File> npjerkFiles = new ArrayList<File>();
 	private static ArrayList <File> xdisFiles = new ArrayList<File>();
 	private static ArrayList <File> npangleFiles = new ArrayList<File>();
+	private static ArrayList <File> npxFiles = new ArrayList<File>();
+	private static ArrayList <File> npyFiles = new ArrayList<File>();
 	//File [] metric files contains 4 is Pspeeds, 5 is Pjerkiness, 6 is Ydis, 7 is Pangles
 
 	public static ArrayList <File> pspeedFiles = new ArrayList<File>();
 	public static ArrayList <File> pjerkFiles = new ArrayList<File>();
 	public static ArrayList <File> ydisFiles = new ArrayList<File>();
 	public static ArrayList <File> pangleFiles = new ArrayList<File>();
+	private static ArrayList <File> pxFiles = new ArrayList<File>();
+	private static ArrayList <File> pyFiles = new ArrayList<File>();
 
 
 	public static ArrayList<File> getNPSpeedFiles(){
@@ -65,6 +69,20 @@ public class GetAllArffsForExercise {
 		return pjerkFiles;
 	}
 	
+	public static ArrayList<File> getNPXFiles(){
+		return npxFiles;
+	}
+	public static ArrayList<File> getNPYFiles(){
+		return npyFiles;
+	}
+	
+	public static ArrayList<File> getPXFiles(){
+		return pxFiles;
+	}
+	public static ArrayList<File> getPYFiles(){
+		return pyFiles;
+	}
+	
 	
 	public static void setFileLists(String dir){
 		
@@ -87,28 +105,34 @@ public class GetAllArffsForExercise {
 			String INPUTFOLDER = INPUTDIR +"test"+i+"Metrics" + "/";
 			File [] metricFiles = new File(INPUTFOLDER).listFiles();
 			//for(int j=0; j<metricFiles.length;j++){
-				//System.out.println("DEBUG: Metric Files 0"+ metricFiles[0].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 1"+ metricFiles[1].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 2"+ metricFiles[2].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 3"+ metricFiles[3].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 4"+ metricFiles[4].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 5"+ metricFiles[5].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 6"+ metricFiles[6].getAbsolutePath());
-				//System.out.println("DEBUG: Metric Files 7"+ metricFiles[7].getAbsolutePath());
+				/*System.out.println("DEBUG: Metric Files 0"+ metricFiles[0].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 1"+ metricFiles[1].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 2"+ metricFiles[2].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 3"+ metricFiles[3].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 4"+ metricFiles[4].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 5"+ metricFiles[5].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 6"+ metricFiles[6].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 7"+ metricFiles[7].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 8"+ metricFiles[8].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 9"+ metricFiles[9].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 10"+ metricFiles[10].getAbsolutePath());
+				System.out.println("DEBUG: Metric Files 11"+ metricFiles[11].getAbsolutePath());*/
 
 				npspeedFiles.add(metricFiles[0]);
 				npangleFiles.add(metricFiles[1]);				
-				xdisFiles.add(metricFiles[2]);
-				npjerkFiles.add(metricFiles[3]);
-
-				pspeedFiles.add(metricFiles[4]);				
-				pangleFiles.add(metricFiles[5]);
-				ydisFiles.add(metricFiles[6]);
-				pjerkFiles.add(metricFiles[7]);
+				npxFiles.add(metricFiles[2]);
+				npyFiles.add(metricFiles[3]);
+				pxFiles.add(metricFiles[4]);
+				pyFiles.add(metricFiles[5]);
+				xdisFiles.add(metricFiles[6]);
+				npjerkFiles.add(metricFiles[7]);
+				pspeedFiles.add(metricFiles[8]);				
+				pangleFiles.add(metricFiles[9]);
+				ydisFiles.add(metricFiles[10]);
+				pjerkFiles.add(metricFiles[11]);
 
 		}
 			
-		
 			
 		}
 		//String INPUTFOLDER = INPUTDIR +"test"+trial+"Metrics" + "/";

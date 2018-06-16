@@ -21,25 +21,15 @@ public class Arff {
 	public String WMFTClass;
 	public  int trial;
 	//2D array containing each column of arff file in an arraylist 
-	public ArrayList<ArrayList<Double>> list;
+	//where list.get(0) represents arraylist for keypoint 0, list.get(1) reresents arraylist for keypoint 1 so on so forth
+	public ArrayList<ArrayList<Double>> multilist;
 	//public ArrayList<ArrayList<Double>> pList;
 
-
-	//constructor for Arff when writing speed,jerk,distances, angle
-	/*public Arff(String Path, int Trial, String wolfClass,ArrayList<ArrayList<Double>> NPList, ArrayList<ArrayList<Double>> PList ){
-		path=Path;
-		trial=Trial;
-		WMFTClass=wolfClass;
-		
-		npList = NPList;
-		pList=PList;
-		
-	}*/
 
 	public Arff(String Path, String wolfClass, ArrayList<ArrayList<Double>> List ){
 		path=Path;
 		WMFTClass=wolfClass;
-		list = List;
+		multilist = List;
 		
 	}
 	
@@ -47,9 +37,9 @@ public class Arff {
 	path=Path;
 	trial=Trial;
 	WMFTClass=wolfClass;
-	list = List;
+	multilist = List;
 	
-}
+	}
 	
 
 }

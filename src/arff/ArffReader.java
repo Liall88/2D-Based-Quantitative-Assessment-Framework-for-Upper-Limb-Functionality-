@@ -49,33 +49,46 @@ public class ArffReader {
 	private static ArrayList<Arff> npAngleArffs= new ArrayList <Arff>();
 	private static ArrayList<Arff> xDisArffs= new  ArrayList <Arff>();
 	private static ArrayList<Arff> npJerkArffs= new  ArrayList <Arff>();
-	
+	private static ArrayList <Arff>npXArffs= new  ArrayList <Arff>();
+	private static ArrayList <Arff>npYArffs= new  ArrayList <Arff>();
+
 	private static ArrayList<Arff> pSpeedArffs=new ArrayList <Arff>();
 	private static ArrayList<Arff> pAngleArffs= new ArrayList <Arff>();
 	private static ArrayList<Arff> yDisArffs= new  ArrayList <Arff>();
 	private static ArrayList<Arff> pJerkArffs= new  ArrayList <Arff>();
-	
+	private static ArrayList <Arff>pXArffs= new  ArrayList <Arff>();
+	private static ArrayList <Arff>pYArffs= new  ArrayList <Arff>();
 	
 	//2D arrays for each metric file read and their contents in String [] format
 	private static ArrayList<ArrayList<String[]>> npJerkMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	private static ArrayList<ArrayList<String[]>> npSpeedMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	private static ArrayList<ArrayList<String[]>> npAngleMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	private static ArrayList<ArrayList<String[]>> xDisMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
+	private static ArrayList<ArrayList<String[]>> npXMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
+	private static ArrayList<ArrayList<String[]>> npYMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
+
 
 	private static ArrayList<ArrayList<String[]>> pJerkMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	private static ArrayList<ArrayList<String[]>> pSpeedMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	private static ArrayList<ArrayList<String[]>> pAngleMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	private static ArrayList<ArrayList<String[]>> yDisMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
+	private static ArrayList<ArrayList<String[]>> pXMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
+	private static ArrayList<ArrayList<String[]>> pYMetricsFilesRows=  new ArrayList<ArrayList<String[]>>();
 	
 	//Data Structures for values extracted from ARFF Files:
 	//WMFT Class
 	
-
-	
-  //Arraylists For each Arff Object
+	//Arraylists For each Arff Object
 	//ArrayLists of data read from Arff Files2D arrays for each metric and their contents in String [] format
 	//2D arrays that contain arraylists of data for each keypoint(0-7)
 	
+	//x and y positions
+	private static ArrayList<ArrayList<Double>> extnpXList = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> extnpYList = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> extpXList = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> extpYList = new ArrayList<ArrayList<Double>>();
+	
+
 	private static ArrayList<ArrayList<Double>> extnpAngList = new ArrayList<ArrayList<Double>>();
 	private static ArrayList<ArrayList<Double>> extpAngList = new ArrayList<ArrayList<Double>>();
 
@@ -121,22 +134,7 @@ public class ArffReader {
 		    
 	}
 	
-	private static void searchRowsandSaveStringValues( File file, ArrayList<String[]> rowList){	//searches for term @DATA and starts reading after that line
-		try {
-			Scanner scanner = new Scanner(file);
-			while (scanner.hasNextLine()) {
-		    String nextToken = scanner.nextLine();
-	    	//System.out.println("DEBUG Next Token "+nextToken);
-	    	if (nextToken.contains("@DATA")){//search term
-	    		//System.out.println("DEBUG: FOUND @DATA");
-	    		rowExtractor(scanner, rowList);//send scanner position to method
-	    	}
-			}
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
-		    }
-		    
-	}
+	
 	
 	private static void rowExtractor(Scanner sc,  ArrayList<String[]> rowList){// extracts each line of the arff file
 		//split file into columns by commas
@@ -156,50 +154,19 @@ public class ArffReader {
 	
 	
 	
-	
-	private static void  setMetricFilesRows(ArrayList <File> speedFiles,ArrayList <File> angleFiles,ArrayList <File> disFiles, ArrayList <File> jerkFiles, 
-			ArrayList<ArrayList<String[]>> speedFilesRows,ArrayList<ArrayList<String[]>> angleFilesRows, ArrayList<ArrayList<String[]>> disFilesRows, ArrayList<ArrayList<String[]>> jerkFilesRows){
+	//TODO: make this single method
+	private static void  setMetricFilesRows(ArrayList <File> Files,  ArrayList<ArrayList<String[]>> FilesRows){
 
 		//save each metric file into String [] format and save in MetricsFilesRows
-		for(int i =0; i <jerkFiles.size(); i++){ //number of speed,jerk, disFromRefFiles and angles should be the same
-			ArrayList<String[]>jerkRows= new ArrayList<String[]>()  ; 
-			searchFileAndSaveStringRows(jerkFiles.get(i), jerkRows);		
-			jerkFilesRows.add(jerkRows);
-			//System.out.println("DEBUG: jerkMetricsFile.get("+i+"): " + jerkMetricsFilesRows.get(i));
-			//System.out.println("DEBUG: jerkMetricsFile.size " + jerkMetricsFilesRows.size());
-			//System.out.println("DEBUG: jerkMetricsFile.get(i).get(0) " + jerkMetricsFilesRows.get(i).get(0).toString());
-
-			//System.out.println("DEBUG: jerkRowsSize"+jerkRows.size());
-
-			
-			ArrayList<String[]> speedRows= new ArrayList<String[]>() ; 
-			searchFileAndSaveStringRows(speedFiles.get(i), speedRows);		
-			speedFilesRows.add(speedRows);
-			//System.out.println("DEBUG: speedMetricsFile.get(i): " + speedMetricsFilesRows.get(i));
-			//System.out.println("DEBUG: speedRowsSize "+speedMetricsFilesRows.size());
-			//System.out.println("DEBUG: speedMetricsFile.size " + speedMetricsFile.size());
-
-
-			ArrayList<String[]> angleRows =new ArrayList<String[]>() ; 
-			searchFileAndSaveStringRows(angleFiles.get(i), angleRows);		
-			angleFilesRows.add(angleRows);
-			//System.out.println("DEBUG: angleMetricsFile.get(i): " + angleMetricsFilesRows.get(i));
-			//System.out.println("DEBUG: angleRowsSize "+angleMetricsFilesRows.size());
-			//System.out.println("DEBUG: angleMetricsFile.size " + angleMetricsFile.size());
-
-
-			ArrayList<String[]> disFromRefRows =new ArrayList<String[]>() ; 
-			searchFileAndSaveStringRows(disFiles.get(i), disFromRefRows);		
-			disFilesRows.add(disFromRefRows);
-			//System.out.println("DEBUG: disFromrefMetrics.get(i): " + disFromRefMetricsFilesRows.get(i));
-			//System.out.println("DEBUG: disFromRefSize "+disFromRefMetricsFilesRows.size());
-			//System.out.println("DEBUG: disFromRefMetricsFile.size " + disFromRefMetricsFile.size());
-			
+		for(int i =0; i <Files.size(); i++){ //number of speed,jerk, disFromRefFiles and angles should be the same
+			ArrayList<String[]>Rows= new ArrayList<String[]>()  ; 
+			searchFileAndSaveStringRows(Files.get(i), Rows);		
+			FilesRows.add(Rows);		
 		}
 		
 	}
 	
-	//sets all arraylists for each keypoint for speed, jerk and dist
+	//sets all arraylists for each keypoint for speed, jerk and dist, to make Arff object
 	private static ArrayList<Arff> getArffList(String Path,ArrayList<ArrayList<String[]>> metricsFilesRows,ArrayList<Arff> arffList, int attributeNum){
 		for(int i =0;i< metricsFilesRows.size();i++){//metric file for each trial
 			String path =Path;
@@ -250,11 +217,10 @@ public class ArffReader {
 		return multiList;
 	}
 	
-	public static void readAllARFFs(String folder){//reads all arff Files in a directory and sets a File List for each metric
-		//loadDataFromArffFile(SPEEDFILE); 
-		//loadDataFromArffFile(JERKFILE); //works
-		// contains each row of a file in String []
-		
+	//reads all arff Files in a directory and sets a File List for each metric
+	//Must be called in external classes before using getter methods
+	public static void readAllARFFs(String folder){
+	
 		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 		GetAllArffsForExercise.setFileLists(folder);
 		
@@ -275,11 +241,27 @@ public class ArffReader {
 
 		ArrayList <File> pAngFiles = GetAllArffsForExercise.getPAngFiles();
 		
-		setMetricFilesRows(npSpeedFiles,npAngFiles, xDisFiles ,npJerkFiles,
-						   npSpeedMetricsFilesRows,npAngleMetricsFilesRows,xDisMetricsFilesRows, npJerkMetricsFilesRows );
-		setMetricFilesRows(pSpeedFiles,pAngFiles, yDisFiles ,pJerkFiles,
-				   pSpeedMetricsFilesRows,pAngleMetricsFilesRows,yDisMetricsFilesRows, pJerkMetricsFilesRows );
+		ArrayList <File> npXFiles = GetAllArffsForExercise.getNPXFiles();;
+		
+		ArrayList <File> npYFiles = GetAllArffsForExercise.getNPYFiles();
 
+		ArrayList <File> pXFiles = GetAllArffsForExercise.getPXFiles();
+
+		ArrayList <File> pYFiles = GetAllArffsForExercise.getPYFiles();
+		
+		setMetricFilesRows(npSpeedFiles,npSpeedMetricsFilesRows );
+		setMetricFilesRows(npAngFiles,npAngleMetricsFilesRows );
+		setMetricFilesRows(xDisFiles,xDisMetricsFilesRows );
+		setMetricFilesRows(npJerkFiles,npJerkMetricsFilesRows );
+		setMetricFilesRows(npXFiles,npXMetricsFilesRows );
+		setMetricFilesRows(npYFiles,npYMetricsFilesRows );
+
+		setMetricFilesRows(pSpeedFiles,pSpeedMetricsFilesRows );
+		setMetricFilesRows(pAngFiles,pAngleMetricsFilesRows );
+		setMetricFilesRows(yDisFiles,yDisMetricsFilesRows );
+		setMetricFilesRows(pJerkFiles,pJerkMetricsFilesRows );
+		setMetricFilesRows(pXFiles,pXMetricsFilesRows );
+		setMetricFilesRows(pYFiles,pYMetricsFilesRows );
 	}
 	
 	
@@ -334,43 +316,34 @@ public class ArffReader {
 		
 	}
 	
+	public static ArrayList<Arff> getNPXArffs(String INPUTFOLDER){
+		ArrayList<Arff> npxArff=getArffList(INPUTFOLDER,npXMetricsFilesRows,npXArffs,9);
+		//System.out.println("DEBUG: metricsFilesRows.get 0.get 5"+ jerkMetricsFilesRows.get(0).get(5));
+		return npxArff;
+		
+	}
+	public static ArrayList<Arff> getNPYArffs(String INPUTFOLDER){
+		ArrayList<Arff> npyArff=getArffList(INPUTFOLDER,npYMetricsFilesRows,npYArffs,9);
+		//System.out.println("DEBUG: metricsFilesRows.get 0.get 5"+ jerkMetricsFilesRows.get(0).get(5));
+		return npyArff;
+		
+	}
+	public static ArrayList<Arff> getPXArffs(String INPUTFOLDER){
+		ArrayList<Arff> pxArff=getArffList(INPUTFOLDER,pXMetricsFilesRows,pXArffs,9);
+		//System.out.println("DEBUG: metricsFilesRows.get 0.get 5"+ jerkMetricsFilesRows.get(0).get(5));
+		return pxArff;
+		
+	}
+	public static ArrayList<Arff> getPYArffs(String INPUTFOLDER){
+		ArrayList<Arff> pyArff=getArffList(INPUTFOLDER,pYMetricsFilesRows,pYArffs,9);
+		//System.out.println("DEBUG: metricsFilesRows.get 0.get 5"+ jerkMetricsFilesRows.get(0).get(5));
+		return pyArff;
+		
+	}
 	
-
 	
 	
-	public static void main (String[] args) throws IOException{
-		String folderName="symposiumCupExercises";
-		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
-		String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/";
-		
-		readAllARFFs(INPUTFOLDER);
-		
-		ArrayList<Arff> npSArffs=getNPSpeedArffs(INPUTFOLDER);	
-		System.out.println("DEBUG npsArffs.size() "+ npSArffs.size());
 	
-		ArrayList<Arff> npAArffs=getNPAngArffs(INPUTFOLDER);	
-		System.out.println("DEBUG npAArffs.size() "+ npAArffs.size());
-		
-		ArrayList<Arff> xDisArffs=getXDisArffs(INPUTFOLDER);	
-		System.out.println("DEBUG xDisArffs.size() "+ xDisArffs.size());
-		
-		ArrayList<Arff> npJArffs=getNPJerkArffs(INPUTFOLDER);	
-		System.out.println("DEBUG npJArffs.size() "+ npJArffs.size());
-	
-		ArrayList<Arff> pSArffs=getPSpeedArffs(INPUTFOLDER);	
-		System.out.println("DEBUG psArffs.size() "+ pSArffs.size());
-		
-		ArrayList<Arff> pAArffs=getPAngArffs(INPUTFOLDER);	
-		System.out.println("DEBUG pAArffs.size() "+ pAArffs.size());
-		
-		ArrayList<Arff> yDisArffs=getYDisArffs(INPUTFOLDER);	
-		System.out.println("DEBUG yDisArffs.size() "+ yDisArffs.size());
-		
-		ArrayList<Arff> pJArffs=getPJerkArffs(INPUTFOLDER);	
-		System.out.println("DEBUG pJArffs.size() "+ pJArffs.size());
-			
-	}	
-		  
 
 	
 	public static Instances loadDataFromArffFile(String path) throws IOException{

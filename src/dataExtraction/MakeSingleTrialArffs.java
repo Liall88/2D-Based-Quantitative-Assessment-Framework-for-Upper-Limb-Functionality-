@@ -38,6 +38,8 @@ package dataExtraction;
  *TODO: put arff writing into separate class
  *TODO:upload File Structure needed in GitHub
  *TODO: save openpose outputs and arff outputs relative to eclipse project not using absolute paths
+ *TODO: Write patientinfo.txt into folder]
+ *TODO: use indicator for which arm is parietic L or R for automatic analysis
  *
 
  */
@@ -51,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+
 import org.json.simple.parser.ParseException;
 
 import arff.Arff;
@@ -58,11 +61,11 @@ import arff.ArffWriter;
 import arff.GetAllArffsForExercise;
 
 
-public class MakeSingleTrialMetricArffs {
+public class MakeSingleTrialArffs {
 	/*
 	 * variables for input/output of arff files
 	 */
-	private  static int trial; 	
+	public  static int trial; 	
 	private static String WMFTClass;//wolf motor function class (0-5) or ? if unknown
 	private static String folderName;
 	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
@@ -81,12 +84,18 @@ public class MakeSingleTrialMetricArffs {
 	private static String NPANGFILE;
 	private static String XDISFILE;
 	private static String NPJERKFILE;
+	private static String NPXFILE;
+	private static String NPYFILE;
+
+
 	
 	private static String PSPEEDFILE;
 	private static String PANGFILE;
 	private static String YDISFILE;
 	private static String PJERKFILE;
-	
+	private static String PXFILE;
+	private static String PYFILE;
+
 	
 	//where JSON inputs are
 	private static File[] nonParFiles;
@@ -112,6 +121,50 @@ public class MakeSingleTrialMetricArffs {
 	
 	//Arraylists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
 	//2D arrays that contain arraylists of data for each keypoint(0-7)
+	
+	//arraylists of x and y coordinates of openpose test
+	private static ArrayList<ArrayList<Double>> npXList = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> npYList = new ArrayList<ArrayList<Double>>();
+	
+	private static ArrayList<ArrayList<Double>> pXList = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> pYList = new ArrayList<ArrayList<Double>>();
+	
+	private static ArrayList<Double> npXKey0List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey1List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey2List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey3List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey4List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey5List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey6List= new ArrayList<Double>();
+	private static ArrayList<Double> npXKey7List= new ArrayList<Double>();
+	
+	private static ArrayList<Double> npYKey0List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey1List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey2List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey3List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey4List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey5List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey6List= new ArrayList<Double>();
+	private static ArrayList<Double> npYKey7List= new ArrayList<Double>();
+	
+
+	private static ArrayList<Double> pXKey0List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey1List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey2List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey3List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey4List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey5List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey6List= new ArrayList<Double>();
+	private static ArrayList<Double> pXKey7List= new ArrayList<Double>();
+	
+	private static ArrayList<Double> pYKey0List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey1List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey2List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey3List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey4List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey5List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey6List= new ArrayList<Double>();
+	private static ArrayList<Double> pYKey7List= new ArrayList<Double>();
 	
 	//Arraylists For Arff Object
 	private static ArrayList<ArrayList<Double>> npAngList = new ArrayList<ArrayList<Double>>();
@@ -265,6 +318,31 @@ public class MakeSingleTrialMetricArffs {
 		}
 	}
 	
+	private static void setCoorList(ArrayList <Skeleton> skList, ArrayList<Double>xKey0List,ArrayList<Double> xKey1List,
+			ArrayList<Double>xKey2List,ArrayList<Double>xKey3List,ArrayList<Double>xKey4List,ArrayList<Double>xKey5List,
+			ArrayList<Double>xKey6List,ArrayList<Double>xKey7List,ArrayList<Double>yKey0List,ArrayList<Double> yKey1List,
+			ArrayList<Double>yKey2List,ArrayList<Double>yKey3List,ArrayList<Double>yKey4List,ArrayList<Double>yKey5List,
+			ArrayList<Double>yKey6List,ArrayList<Double>yKey7List){
+		for(int i =0; i<skList.size(); i++){
+			xKey0List.add(skList.get(i).key0.x);
+			xKey1List.add(skList.get(i).key1.x);
+			xKey2List.add(skList.get(i).key2.x);
+			xKey3List.add(skList.get(i).key3.x);
+			xKey4List.add(skList.get(i).key4.x);
+			xKey5List.add(skList.get(i).key5.x);
+			xKey6List.add(skList.get(i).key6.x);
+			xKey7List.add(skList.get(i).key7.x);	
+			
+			yKey0List.add(skList.get(i).key0.y);
+			yKey1List.add(skList.get(i).key1.y);
+			yKey2List.add(skList.get(i).key2.y);
+			yKey3List.add(skList.get(i).key3.y);
+			yKey4List.add(skList.get(i).key4.y);
+			yKey5List.add(skList.get(i).key5.y);
+			yKey6List.add(skList.get(i).key6.y);
+			yKey7List.add(skList.get(i).key7.y);
+		}
+	}
 	private static void setReferenceTrajectory (ArrayList <Skeleton> skList){
 		Keypoint refKey;
 		for(int i= 0; i <skList.size();i++){
@@ -305,7 +383,7 @@ public class MakeSingleTrialMetricArffs {
 			ArrayList<Keypoint> refTrajKey4, ArrayList<Keypoint> refTrajKey5, ArrayList<Keypoint> refTrajKey6, ArrayList<Keypoint> refTrajKey7, ArrayList<Skeleton> pSkelList){
 		//get displacement in x and y  of each Keypoint from reference trajectory key
 		double disRefX, disRefY;
-		for(int i =0; i <refTrajKey0.size();i++){
+		for(int i =0; i <refTrajKey0.size();i++){//DEBUG: THIS ONLY COMPARES VALUES FOR THE SIZE OF THE REFTRAJ
 			disRefX = refTrajKey0.get(i).x - pSkelList.get(i).key0.x;
 			disRefY = refTrajKey0.get(i).y - pSkelList.get(i).key0.y;
 			disKey0X.add(disRefX);
@@ -501,8 +579,9 @@ public class MakeSingleTrialMetricArffs {
 	
 	
 
-	private static void setMultiArrays(){ //sets the 2D arrays representing arraylist for each keypoint 
+	private static void setMultiArray(){ //sets the 2D arrays representing arraylist for each keypoint 
 		
+		//Add angs
 		npAngList.add(npAng0List);pAngList.add(pAng0List);
 		npAngList.add(npAng1List);pAngList.add(pAng1List);
 		npAngList.add(npAng2List);pAngList.add(pAng2List);
@@ -519,6 +598,26 @@ public class MakeSingleTrialMetricArffs {
 		disXList.add(disKey6X);disYList.add(disKey6Y);
 		disXList.add(disKey7X);disYList.add(disKey7Y);
 
+		//add x and y coordinates
+		npXList.add(npXKey0List);pXList.add(pXKey0List);
+		npXList.add(npXKey1List);pXList.add(pXKey1List);
+		npXList.add(npXKey2List);pXList.add(pXKey2List);
+		npXList.add(npXKey3List);pXList.add(pXKey3List);
+		npXList.add(npXKey4List);pXList.add(pXKey4List);
+		npXList.add(npXKey5List);pXList.add(pXKey5List);
+		npXList.add(npXKey6List);pXList.add(pXKey6List);
+		npXList.add(npXKey7List);pXList.add(pXKey7List);
+
+		npYList.add(npYKey0List);pYList.add(pYKey0List);
+		npYList.add(npYKey1List);pYList.add(pYKey1List);
+		npYList.add(npYKey2List);pYList.add(pYKey2List);
+		npYList.add(npYKey3List);pYList.add(pYKey3List);
+		npYList.add(npYKey4List);pYList.add(pYKey4List);
+		npYList.add(npYKey5List);pYList.add(pYKey5List);
+		npYList.add(npYKey6List);pYList.add(pYKey6List);
+		npYList.add(npYKey7List);pYList.add(pXKey7List);
+		
+		//add speeds
 		npSpeedList.add(npKey0SpeedList);pSpeedList.add(pKey0SpeedList);
 		npSpeedList.add(npKey1SpeedList);pSpeedList.add(pKey1SpeedList);
 		npSpeedList.add(npKey2SpeedList);pSpeedList.add(pKey2SpeedList);
@@ -527,7 +626,8 @@ public class MakeSingleTrialMetricArffs {
 		npSpeedList.add(npKey5SpeedList);pSpeedList.add(pKey5SpeedList);
 		npSpeedList.add(npKey6SpeedList);pSpeedList.add(pKey6SpeedList);
 		npSpeedList.add(npKey7SpeedList);pSpeedList.add(pKey7SpeedList);
-
+		
+		//add jerks
 		npJerkList.add(npKey0JerkList);pJerkList.add(pKey0JerkList);
 		npJerkList.add(npKey1JerkList);pJerkList.add(pKey1JerkList);
 		npJerkList.add(npKey2JerkList);pJerkList.add(pKey2JerkList);
@@ -557,6 +657,22 @@ public class MakeSingleTrialMetricArffs {
 		Arff dArff = new Arff(XDISFILE,trial,WMFTClass,disXList);
 		return dArff;
 	}
+	private static Arff getNPXArff(){
+		Arff npxArff = new Arff(NPXFILE,trial,WMFTClass,npXList);
+		return npxArff;
+	}
+	private static Arff getNPYArff(){
+		Arff npyArff = new Arff(NPYFILE,trial,WMFTClass,npYList);
+		return npyArff;
+	}
+	private static Arff getPXArff(){
+		Arff pxArff = new Arff(PXFILE,trial,WMFTClass,pXList);
+		return pxArff;
+	}
+	private static Arff getPYArff(){
+		Arff pyArff = new Arff(PYFILE,trial,WMFTClass,pYList);
+		return pyArff;
+	}
 	private static Arff getPSpeedArff(){
 		Arff sArff = new Arff(PSPEEDFILE,trial,WMFTClass,pSpeedList);
 		return sArff;
@@ -574,10 +690,13 @@ public class MakeSingleTrialMetricArffs {
 		return dArff;
 	}
 	
-	
-	
+
 	private static void setAllLists() throws IOException, ParseException{
 		
+		 setCoorList(npSkeletonList,npXKey0List,npXKey1List,npXKey2List,npXKey3List,npXKey4List,npXKey5List,npXKey6List,npXKey7List,
+				 npYKey0List,npYKey1List,npYKey2List,npYKey3List,npYKey4List,npYKey5List,npYKey6List,npYKey7List);
+		 setCoorList(pSkeletonList,pXKey0List,pXKey1List,pXKey2List,pXKey3List,pXKey4List,pXKey5List,pXKey6List,pXKey7List,
+				 pYKey0List,pYKey1List,pYKey2List,pYKey3List,pYKey4List,pYKey5List,pYKey6List,pYKey7List);
 		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
 		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
 		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
@@ -587,19 +706,20 @@ public class MakeSingleTrialMetricArffs {
 		 setNormDistances();
 		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
 		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
-		 setMultiArrays();		 
+		 setMultiArray();		 
 	}
 	
 	
 	 public static void main(String[] args) throws IOException, ParseException {
 
 		 
-		 trial = 0;
+		trial = 9;
 		 
 		WMFTClass="?";//wolf motor function class (0-5) or ? if unknown
-		folderName="symposiumCupExercises";
+		folderName="longExercisesSegmented";
 		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
-		 OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics"+"/";
+		///homes/la2817/Desktop/Outputs/arff_Outputs/testData/longExcercises/test0Metrics
+		 OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics/";
 		 //static String OUT ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
 		//arff_Outputs.testData.symposiumCupExercises.test1Metrics;
 		//final static String OUTPUTFOLDER = "/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics/";
@@ -611,12 +731,15 @@ public class MakeSingleTrialMetricArffs {
 		NPANGFILE= OUTPUTFOLDER+ "NPangles" +trial+".arff";
 		XDISFILE = OUTPUTFOLDER + "XdisFromRef" +trial+".arff";
 		NPJERKFILE = OUTPUTFOLDER + "NPjerkiness" +trial+".arff";
-			
+		NPXFILE = OUTPUTFOLDER + "NPxPos" +trial+".arff";
+		NPYFILE = OUTPUTFOLDER + "NPyPos" +trial+".arff";
+	
 		PSPEEDFILE= OUTPUTFOLDER+ "Pspeeds" +trial+".arff";	
 		PANGFILE= OUTPUTFOLDER+ "Pangles" +trial+".arff";
 		YDISFILE = OUTPUTFOLDER + "YdisFromRef" +trial+".arff";
 		PJERKFILE = OUTPUTFOLDER + "Pjerkiness" +trial+".arff";
-		
+		PXFILE = OUTPUTFOLDER + "PxPos" +trial+".arff";
+		PYFILE = OUTPUTFOLDER + "PyPos" +trial+".arff";
 
 		//where JSON inputs are
 		nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
@@ -625,6 +748,7 @@ public class MakeSingleTrialMetricArffs {
 		
 		 arff.ArffReader.generalSetPathArray(nonParFiles, nonparPaths);		
 		 arff.ArffReader.generalSetPathArray(parFiles, parPaths);	
+		 
 		 setSkeletonList(nonparPaths, npSkeletonList); 
 		 setSkeletonList(parPaths, pSkeletonList);
 		 setAllLists();	
@@ -632,10 +756,14 @@ public class MakeSingleTrialMetricArffs {
 		 Arff npspeedArff= getNPSpeedArff();
 		 Arff npangArff= getNPAngArff();
 		 Arff xdisArff= getXDisFromRefArff();
+		 Arff npXPosArff = getNPXArff();
+		 Arff npYPosArff = getNPYArff();	 
 		 Arff npjerkArff= getNPJerkArff();
 		 
 		 Arff pspeedArff= getPSpeedArff();
 		 Arff pangArff= getPAngArff();
+		 Arff pXPosArff = getPXArff();
+		 Arff pYPosArff = getPYArff();
 		 Arff ydisArff= getYDisFromRefArff();
 		 Arff pjerkArff= getPJerkArff();
 		 
@@ -644,11 +772,17 @@ public class MakeSingleTrialMetricArffs {
 		 //System.out.println("DEBUG: npspeedArff.list.get(0).size()"+npspeedArff.list.get(0).size());
 		 //System.out.println("DEBUG: XdisArff.list.get(0).size()"+xdisArff.list.get(0).size());
 		
+		 System.out.println("DEBUG: outputfolder : "+OUTPUTFOLDER);
 		 ArffWriter.cleanOutputDirectory(OUTPUTFOLDER);
-		 //System.out.println("DEBUG: outputfolder : "+OUTPUTFOLDER);
 		
 		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, npspeedArff, "speed",8);
 		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, npangArff, "angle",6);
+		 
+		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, npXPosArff, "xpos", 8);
+		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, npYPosArff, "ypos", 8);
+		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, pXPosArff, "xpos", 8);
+		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, pYPosArff, "ypos", 8);
+
 		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, xdisArff, "xDis",8);
 		 ArffWriter.writeSingleTrialArff(OUTPUTFOLDER, npjerkArff, "jerk",8);
 
