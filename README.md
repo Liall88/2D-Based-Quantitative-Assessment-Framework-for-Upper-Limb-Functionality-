@@ -1,6 +1,6 @@
 # 2D-MFANN
 TODO: add all file paths local to eclipse project
-
+TODO: make CSVWriter.java in addition to ArffWriter.java
 
 
 
