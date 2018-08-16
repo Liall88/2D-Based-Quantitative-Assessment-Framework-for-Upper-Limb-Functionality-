@@ -19,47 +19,28 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.exception.NonMonotonicSequenceException;
-
+import java.nio.file.Files;
 import arff.Arff;
 import arff.ArffReader;
+import arff.ArffWriter;
 
 /**
  * @author la2817
+ *
+ *TODO: fix parser errors, do by hand for now as errors
  *
  */
 public class MultipleTrialsData {
 	//number of trials 
 	final int trialNum = MakeSingleTrialArffs.numOfTests;
 	
-	//ArrayLists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
-	private static ArrayList<ArrayList<Double>> npAngAvrgList = new ArrayList<ArrayList<Double>>();
-	private static ArrayList<ArrayList<Double>> pAngAvrgList = new ArrayList<ArrayList<Double>>();
-
-	//distances of keypoint in terms of x,y coordinates from reference trajectory Keypoints
-	private static ArrayList<ArrayList<Double>> disXAvrgList= new ArrayList<ArrayList<Double>>(); ;
-	private static ArrayList<ArrayList<Double>> disYAvrgList= new ArrayList<ArrayList<Double>>(); ;
-
-	//normalised distances of keypoint from reference trajectory
-	private static ArrayList<ArrayList<Double>> disNormAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	//the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk 
 	
-	//speed  of keypoints in terms of pixel per frame between skeletons
-	private static ArrayList<ArrayList<Double>> npSpeedAvrgList= new ArrayList<ArrayList<Double>>(); ;
-	private static ArrayList<ArrayList<Double>> pSpeedAvrgList= new ArrayList<ArrayList<Double>>(); ;
-
-	//jerk (or smoothness) of keypoints
-	private static ArrayList<ArrayList<Double>> npJerkAvrgList= new ArrayList<ArrayList<Double>>(); ;
-	private static ArrayList<ArrayList<Double>> pJerkAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	// private static ArrayList<ArrayList<Double>> allMetricsAvrgList
 	
-
 	
 	//public static void setAverages(ArrayList<Double>  )
 	//get data from ARFFReader class
-private static ArrayList<String> getAverageAcrossTrials(){
-		
-		return new ArrayList<String> ();
-	
-	}
-
 
 
 //method that uses cubic spline interpolation to return an arff of the same length to a larger one 
@@ -96,134 +77,76 @@ public static ArrayList<Double> listCubicSplineInterpolator(ArrayList<Double> iL
 }
 
 
-public static ArrayList<Double> listScale (ArrayList<Double> list, int scaleSize){
+//must send scaled lists of same size to this method
+public static ArrayList<Double> averageSingleList(ArrayList<ArrayList<Double>> scaledTrials){
+	System.out.println("DEBUG: scaledTrials size" +scaledTrials.get(0).size());
+
+	int scaledSize = scaledTrials.get(0).size();
+	ArrayList<Double> avrglist = new ArrayList<Double>();
+	Double sum=0.0;
+	for(int i =0; i<scaledSize;i++){//length of trial		
+		sum = 0.0;
+		for(int j=0;j<scaledTrials.size();j++){//number of trials
+		 Double val = scaledTrials.get(j).get(i); 
+		// System.out.println("DEBUG val : " + val);
+
+		 sum+=val;
+		}	
+		//System.out.println("DEBUG: avrgVal: " + sum/scaledTrials.size());
+		avrglist.add(sum/scaledTrials.size()); //sum of each line in the file 
 	
-	System.out.println("DEBUG: listSize: " +list.size());
-	System.out.println("DEBUG: scaleSize: " +scaleSize);
-
-
-	ArrayList<Double> scaledList = new ArrayList<Double>();
-	int step = list.size()/scaleSize;
-	System.out.println("DEBUG: step: " +step);
-	int stepCount=0;
-	
-	int i =0; 
-	while (scaledList.size()<scaleSize){
-
-		System.out.println("DEBUG: stepCount" +stepCount);
-		if(stepCount==step){
-			scaledList.add(list.get(i));
-			System.out.println("DEBUG: Scalelist: " + list.get(i));
-			stepCount=0;
-		}		
-		stepCount++;
-		i++;
-
 	}	
-		
-	
-	System.out.println("DEBUG: ScalelistSize: " + scaledList.size());
-
-	return scaledList;
-
+	return avrglist;
 }
 
-/*public static ArrayList<Double> listLinearInterpolator(ArrayList<Double> iList, ArrayList<Double> otherList ){
-																											
-	double min=0;
-	double max=iList.size();
-	
-	int norm; //(value-min)/(max-min);
-	ArrayList<Double> normiList = new ArrayList<Double>(); //list containing all normalised values of iList
-	ArrayList<Double> interValList = new ArrayList<Double>();//list containing all interpolated values
+public static ArrayList<Double> findAverage(ArrayList<Double> test1,ArrayList<Double> test2 ){
 
-	double [] normiXList = new double[iList.size()];
+	ArrayList<Double> avrglist = new ArrayList<Double>();
+	Double sum=0.0;
+	for(int i =0; i<test1.size();i++){//length of trial		
+		
+		avrglist.add((test1.get(i)+test2.get(i))/2); //sum of each line in the file 
 	
-	for (int i =0; i <iList.size(); i++){
-		normiXList[i]= (i-min)/(max-min);
-		System.out.println("DEBUG: normXlist:" + normiXList[i]);
+	}	
+	return avrglist;
+}
 
-	}
-	int sampleRate= 1;
-	//(otherList.size()/iList.size());
 	
-	//get normalised values of all i List values
-	/*for (int i =0; i < iList.size(); i++){	
-		normiList.add((iList.get(i)-min)/(max-min));
-		//System.out.println("DEBUG: normlist:" + normiList.get(i));
-		//System.out.println("DEBUG: ilist:" + iList.get(i));					
-		//System.out.println("DEBUG: normlist:" + normiList.get(i));
-
-	}
-	min=0;
-	max=otherList.size();
-	for (int i =0; i < iList.size(); i++){
-		Double interVal=(max-min)*normiXList[i]+min;
-		//interValList.add(iList.get(i));
-		interValList.add(interVal);			
-			/*if(i%sampleRate==0){
-				 System.out.println("DEBUG:adding intermediate value");
-				// Double interVal=(max-min)*normiList.get(i)+min;
-				 //interValList.add(interVal);
-				 System.out.println("DEBUG:adding interVal" + interVal);
-			}
-	 //System.out.println("DEBUG: interValList: " + interValList.get(i));		
-	
+public static ArrayList<Double> getDiff (ArrayList<Double> npList, ArrayList<Double> pList ){
+	ArrayList<Double> distList = new ArrayList<Double>();
+	for(int i =0; i<npList.size(); i++){
+		distList.add((Math.abs(npList.get(i)- pList.get(i))));
+		//System.out.println("debug diff value:" + distList.get(i));
 		}
 	
-	System.out.println("DEBUG: ilistSize: " + iList.size());		
-	System.out.println("DEBUG: normiSize: " + normiList.size());
-	System.out.println("DEBUG: otherListSize: " + otherList.size());
-	System.out.println("DEBUG: interValListSize:" + interValList.size());
-
-	return interValList;
-	
-	
-	// max =otherList.size();
-	
-	//for (int i =0; i < max; i++){
-		//interValuesList.add((max-min)*(normiList.get(i)+min));
-		//System.out.println("DEBUG: interValuesList:" + interValuesList.get(i));
-	//}//
-	
-	/*ArrayList<Double> interpolatedList = new ArrayList<Double> ();
-	LinearInterpolator li = new LinearInterpolator();
-	int maxLim = otherList.size();
-	int sampleRate = (int) maxLim/iList.size();
-	System.out.println("DEBUG: sample Rate: " + sampleRate);
-	
-	double [] x = new double[iList.size()];
-	double [] y = new double[iList.size()];
-
-	for (int i =0; i < iList.size();i++){
-		x[i]=i;//each frame
-		y[i]=(double)iList.get(i);//each y value at each frame
-	}
-			
-	PolynomialSplineFunction psf = li.interpolate(x, y);
-	for(int i =0; i <iList.size()-1;i++ ){
-		System.out.println("DEBUG: min :"+iList.get(i));
-		System.out.println("DEBUG: max : "+iList.get(i+1));
-		min =iList.get(i);
-		max = iList.get(i+1);
-		
-		//System.out.println(" DEBUG: interpolated value:"+ psf.value(iList.get(i)+(iList.get(i+1) - iList.get(i))) );		
-		System.out.println(" DEBUG:  value:"+ ((iList.get(i)+ (iList.get(i+1) - iList.get(i)))));		
-
-	}
-		//between points depending on sample rate 
-		//interpolatedList.add(); //gets each value of the multilist in the iArff and interpolates it using psf	
-	
-}*/
+	return distList;
+}
 
 
 public static void main (String[] args) throws IOException{
-	String folderName="longExercisesSegmented";
+	String folderName="simulatedExercises/ActualCOPY";
+	
+	 String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/"+folderName +"/";
+	 //FILEEXT=".csv";
+	// FILEEXT=".arff";
+	//String folderName="Actual";
 	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
-	String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/";
+	//String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/simulatedExercises/"+folderName+"/";
+	//String INPUTFOLDER="/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/realExercisesArff/earlyExperiment/";
+	////String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/longExercises/";
+	String OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/simulatedExercises/ActualDiff/";
 	
+	//Lists made up of averages from all trials of a single test 
+	
+	//read all Arffs in a folder
+	/*Path path = ...;
+
+	if (Files.exists(path)) {
+	    // ...
+	}*/
 	ArffReader.readAllARFFs(INPUTFOLDER);
-	
+	//Each ArrayList<Arff> each arraylist holds an arff representing the metric file of a single trial
+
 	ArrayList<Arff> npSArffs=ArffReader.getNPSpeedArffs(INPUTFOLDER);	
 	System.out.println("DEBUG npsArffs.size() "+ npSArffs.size());
 
@@ -260,13 +183,170 @@ public static void main (String[] args) throws IOException{
 	ArrayList<Arff> PyArffs=ArffReader.getPYArffs(INPUTFOLDER);	
 	System.out.println("DEBUG PyArffs.size() "+ PyArffs.size());
 	
-	//ArrayList<Double> iList = listCubicSplineInterpolator(npAArffs.get(0).multilist.get(4),pAArffs.get(0).multilist.get(1));
-	//ArrayList<Double> iList = listLinearInterpolator(npAArffs.get(0).multilist.get(4),pAArffs.get(0).multilist.get(1));
-	ArrayList<Double> l = listScale(npAArffs.get(0).multilist.get(4), 100);
+	int numOfArffs= PyArffs.size();
+	
+	
+	//get the differences between np and p for each test, and store with arraylists for keypoints 0-7
+	/*ArrayList<ArrayList<Double>> diffSpeedTest0 = new ArrayList<ArrayList<Double>>();
+	ArrayList<ArrayList<Double>> diffSpeedTest1 = new ArrayList<ArrayList<Double>>();
+	
+	ArrayList<ArrayList<Double>> diffAngTest0 = new ArrayList<ArrayList<Double>>();
+	ArrayList<ArrayList<Double>> diffAngTest1 = new ArrayList<ArrayList<Double>>();
+	
+	ArrayList<ArrayList<Double>> diffJerkTest0 = new ArrayList<ArrayList<Double>>();
+	ArrayList<ArrayList<Double>> diffJerkTest1 = new ArrayList<ArrayList<Double>>();
 
+	//get difference in speed keypoint 1
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(0),pSArffs.get(0).multilist.get(0)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(1),pSArffs.get(0).multilist.get(1)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(2),pSArffs.get(0).multilist.get(2)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(3),pSArffs.get(0).multilist.get(3)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(4),pSArffs.get(0).multilist.get(4)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(5),pSArffs.get(0).multilist.get(5)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(6),pSArffs.get(0).multilist.get(6)));
+	diffSpeedTest0.add(getDiff(npSArffs.get(0).multilist.get(7),pSArffs.get(0).multilist.get(7)));
+	
+	diffAngTest0.add(getDiff(npAArffs.get(0).multilist.get(0),pAArffs.get(0).multilist.get(0)));
+	diffAngTest0.add(getDiff(npAArffs.get(0).multilist.get(1),pAArffs.get(0).multilist.get(1)));
+	diffAngTest0.add(getDiff(npAArffs.get(0).multilist.get(2),pAArffs.get(0).multilist.get(2)));
+	diffAngTest0.add(getDiff(npAArffs.get(0).multilist.get(3),pAArffs.get(0).multilist.get(3)));
+	diffAngTest0.add(getDiff(npAArffs.get(0).multilist.get(4),pAArffs.get(0).multilist.get(4)));
+	diffAngTest0.add(getDiff(npAArffs.get(0).multilist.get(5),pAArffs.get(0).multilist.get(5)));
+	
+	
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(0),pJArffs.get(0).multilist.get(0)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(1),pJArffs.get(0).multilist.get(1)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(2),pJArffs.get(0).multilist.get(2)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(3),pJArffs.get(0).multilist.get(3)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(4),pJArffs.get(0).multilist.get(4)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(5),pJArffs.get(0).multilist.get(5)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(6),pJArffs.get(0).multilist.get(6)));
+	diffJerkTest0.add(getDiff(npJArffs.get(0).multilist.get(7),pJArffs.get(0).multilist.get(7)));
+	
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(0),pSArffs.get(1).multilist.get(0)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(1),pSArffs.get(1).multilist.get(1)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(2),pSArffs.get(1).multilist.get(2)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(3),pSArffs.get(1).multilist.get(3)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(4),pSArffs.get(1).multilist.get(4)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(5),pSArffs.get(1).multilist.get(5)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(6),pSArffs.get(1).multilist.get(6)));
+	diffSpeedTest1.add(getDiff(npSArffs.get(1).multilist.get(7),pSArffs.get(1).multilist.get(7)));
+	
+	diffAngTest1.add(getDiff(npAArffs.get(1).multilist.get(0),pAArffs.get(1).multilist.get(0)));
+	diffAngTest1.add(getDiff(npAArffs.get(1).multilist.get(1),pAArffs.get(1).multilist.get(1)));
+	diffAngTest1.add(getDiff(npAArffs.get(1).multilist.get(2),pAArffs.get(1).multilist.get(2)));
+	diffAngTest1.add(getDiff(npAArffs.get(1).multilist.get(3),pAArffs.get(1).multilist.get(3)));
+	diffAngTest1.add(getDiff(npAArffs.get(1).multilist.get(4),pAArffs.get(1).multilist.get(4)));
+	diffAngTest1.add(getDiff(npAArffs.get(1).multilist.get(5),pAArffs.get(1).multilist.get(5)));
+	
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(0),pJArffs.get(1).multilist.get(0)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(1),pJArffs.get(1).multilist.get(1)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(2),pJArffs.get(1).multilist.get(2)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(3),pJArffs.get(1).multilist.get(3)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(4),pJArffs.get(1).multilist.get(4)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(5),pJArffs.get(1).multilist.get(5)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(6),pJArffs.get(1).multilist.get(6)));
+	diffJerkTest1.add(getDiff(npJArffs.get(1).multilist.get(7),pJArffs.get(1).multilist.get(7)));
+	
+	
+	String OUTPUTTRIAL0 = OUTPUTFOLDER+"/difftest0.arff";
+	String OUTPUTTRIAL1 = OUTPUTFOLDER+"/difftest1.arff";
 
-	//arffListInterpolator(npSArffs,200);
-	//Arff intPShoAngArff = new Arff("/example/path", "?", )	
+	
+	//make arffs and write arffs
+	Arff difftest0 = new Arff(OUTPUTFOLDER,0,diffSpeedTest0,diffAngTest0,diffJerkTest0);
+	Arff difftest1 = new Arff(OUTPUTFOLDER,0,diffSpeedTest1,diffAngTest1,diffJerkTest1);
+	
+	ArffWriter.writeDiffArff(OUTPUTFOLDER, difftest0, "difftest0");
+	ArffWriter.writeDiffArff(OUTPUTFOLDER, difftest1, "difftest1");
+	*/
+
+	
+	//write into Arff
+	
+	/*/for every arff
+	//for each keypoint in each arff multilist
+	//avverage together
+	multiAvrgList.add(npSArffs.get(0).multilist.get(0));
+	multiAvrgList.add(npSArffs.get(1).multilist.get(0));
+	keyAvrgList= averageSingleList(multiAvrgList);
+	
+	
+	
+	//for(int i =0; i <npSArffs.size();i++){
+		//for(int j=0;j<npSArffs.get(0).multilist.size();j++){
+				//	keyAvrgList.add(averageSingleList(npSArffs.get(i).multilist));
+
+		//}
+		//System.out.println("npSpeedAvrgList");
+		//System.out.println(npSpeedAvrgList.size());
+		//System.out.println(npSpeedAvrgList.get(i));	
+	//}
+	for(int i =0; i <npSArffs.size();i++){
+		pSpeedAvrgList.add(averageSingleList(pSArffs.get(i).multilist));
+		//System.out.println("pSpeedAvrgList");
+		System.out.println(pSpeedAvrgList.size());
+		System.out.println(pSpeedAvrgList.get(i));	
+	}
+	for(int i =0; i <npAArffs.size();i++){
+		npAngAvrgList.add(averageSingleList(npAArffs.get(i).multilist));
+		//System.out.println("npAngAvrgList");
+		System.out.println(npAngAvrgList.size());
+		System.out.println(npAngAvrgList.get(i));	
+	}
+	for(int i =0; i <npAArffs.size();i++){
+		pAngAvrgList.add(averageSingleList(pAArffs.get(i).multilist));
+		//System.out.println("pAngAvrgList");
+		System.out.println(pAngAvrgList.size());
+		System.out.println(pAngAvrgList.get(i));	
+	}
+	for(int i =0; i <npJArffs.size();i++){
+		npJerkAvrgList.add(averageSingleList(npJArffs.get(i).multilist));
+		//System.out.println("npJerkAvrgList");
+		System.out.println(npJerkAvrgList.size());
+		System.out.println(npJerkAvrgList.get(i));	
+	}
+	for(int i =0; i <npJArffs.size();i++){
+		pJerkAvrgList.add(averageSingleList(pJArffs.get(i).multilist));
+		//System.out.println("pJerkAvrgList");
+		System.out.println(pJerkAvrgList.size());
+
+		 System.out.println(pJerkAvrgList.get(i));	
+	}
+	
+	
+	
+	
+		//ArrayLists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
+	ArrayList<ArrayList<Double>> npAngAvrgList = new ArrayList<ArrayList<Double>>();
+	ArrayList<ArrayList<Double>> pAngAvrgList = new ArrayList<ArrayList<Double>>();
+
+	//distances of keypoint in terms of x,y coordinates from reference trajectory Keypoints
+	ArrayList<ArrayList<Double>> disXAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	ArrayList<ArrayList<Double>> disYAvrgList= new ArrayList<ArrayList<Double>>(); ;
+
+	//normalised distances of keypoint from reference trajectory
+	ArrayList<ArrayList<Double>> disNormAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	
+	//speed  of keypoints in terms of pixel per frame between skeletons
+	ArrayList<ArrayList<Double>> npSpeedAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	ArrayList<ArrayList<Double>> pSpeedAvrgList= new ArrayList<ArrayList<Double>>(); ;
+
+	//jerk (or smoothness) of keypoints
+	ArrayList<ArrayList<Double>> npJerkAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	ArrayList<ArrayList<Double>> pJerkAvrgList= new ArrayList<ArrayList<Double>>(); ;
+	
+	
+	
+	diffTest0.add(getDiff(npAngAvrgList.get(0),pAngAvrgList.get(0)));
+	diffTest0.add(getDiff(npJerkAvrgList.get(0),pJerkAvrgList.get(0)));
+
+	diffTest1.add(getDiff(npSpeedAvrgList.get(1),pSpeedAvrgList.get(1)));
+	diffTest1.add(getDiff(npAngAvrgList.get(1),pAngAvrgList.get(1)));
+	diffTest1.add(getDiff(npJerkAvrgList.get(1),pJerkAvrgList.get(1)));
+		
+	*/
+	
 }	
 	  
 }

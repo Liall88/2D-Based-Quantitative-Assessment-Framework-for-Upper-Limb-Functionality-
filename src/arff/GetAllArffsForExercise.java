@@ -143,14 +143,14 @@ public class GetAllArffsForExercise {
 		
 	
 		
-		public static void main (String [] args) {
+	/*	public static void main (String [] args) {
 			//System.out.println("DEBUG: InputDIR2 " +INPUTDIR2);
 			String folderName="symposiumCupExercises";
 			//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 			String INPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/testData/"+folderName +"/";
 			setFileLists(INPUTFOLDER);
 				
-		}
+		}*/
 
 
 }

@@ -58,9 +58,15 @@ public class Skeleton {
 	
 	
 	public Skeleton (String path ) throws IOException, ParseException {
-		
 		this.setKeypoints(path);
 		this.setAngles(key0, key1, key2, key3, key4, key5, key6, key7);
+	}
+	
+	public Skeleton (Keypoint k0, Keypoint k1,Keypoint k2,Keypoint k3, Keypoint k4, Keypoint k5, Keypoint k6, Keypoint k7) throws IOException, ParseException {
+		key0=k0;key1=k1;key2=k2;key3=k3;
+		key4=k4;key5=k5;key6=k6;key7=k7;
+		
+		this.setAngles(key0,key1,key2,key3,key4,key5,key6, key7);
 	}
 
 	//import JSON

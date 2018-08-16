@@ -222,7 +222,7 @@ public class ArffReader {
 	public static void readAllARFFs(String folder){
 	
 		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
-		GetAllArffsForExercise.setFileLists(folder);
+ 
 		
 		ArrayList <File> npSpeedFiles = GetAllArffsForExercise.getNPSpeedFiles();;
 		//System.out.println("DEBUG: npspeedFiles.size"+npSpeedFiles.size());
@@ -341,10 +341,6 @@ public class ArffReader {
 		
 	}
 	
-	
-	
-	
-
 	
 	public static Instances loadDataFromArffFile(String path) throws IOException{
 		ArffLoader loader = new ArffLoader();
