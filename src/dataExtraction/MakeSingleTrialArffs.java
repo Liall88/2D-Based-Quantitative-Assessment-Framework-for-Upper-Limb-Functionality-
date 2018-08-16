@@ -779,7 +779,7 @@ public class MakeSingleTrialArffs {
 		trial = 9;
 		 
 		WMFTClass="4";//wolf motor function class (0-5) or ? if unknown
-		folderName="lateExperimentWMFT4";
+		folderName="earlyExperimentWMFT1";
 		//folderName="lateExperiment";
 		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 		///homes/la2817/Desktop/Outputs/arff_Outputs/testData/longExcercises/test0Metrics

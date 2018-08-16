@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class Arff {
 	public String path;
-	public String WMFTPClass;
+	public String pClass;
 	public  int trial;
 	//2D array containing each column of arff file in an arraylist 
 	//where list.get(0) represents arraylist for keypoint 0, list.get(1) reresents arraylist for keypoint 1 so on so forth
@@ -32,7 +32,7 @@ public class Arff {
 
 	public Arff(String Path, String wolfClass, ArrayList<ArrayList<Double>> List ){
 		path=Path;
-		WMFTPClass=wolfClass;
+		pClass=wolfClass;
 		multilist = List;
 		
 	}
@@ -40,7 +40,7 @@ public class Arff {
 	public Arff(String Path, int Trial, String wolfClass,ArrayList<ArrayList<Double>> List ){
 	path=Path;
 	trial=Trial;
-	WMFTPClass=wolfClass;
+	pClass=wolfClass;
 	multilist = List;
 	
 	}
@@ -51,7 +51,7 @@ public class Arff {
 		speedDifflist = sList;
 		angleDifflist = aList;
 		jerkDifflist = jList;
-		WMFTPClass=wolfClass;
+		pClass=wolfClass;
 		
 		}
 	

@@ -56,9 +56,14 @@ public static void writeMetricsData(BufferedWriter bw, Arff arff, int keyNum ) t
 							 //System.out.println("debug:"+	 arff.multilist.get(j).get(i).toString() + ",");
 					}
 				//bw.write(arff.WMFTClass+"\n");
+				if(i==0){
+					bw.write(arff.pClass);
+
+				}
 				bw.write("\n");
 
 				}
+				
 				
 }
 
@@ -95,15 +100,14 @@ public static void writeDiffData(BufferedWriter bw, Arff arff) throws IOExceptio
 					","+ jerkList.get(5).get(i).toString() +
 					","+ jerkList.get(6).get(i).toString() +
 					","+ jerkList.get(7).get(i).toString() +
-					
-					
-					
-					
-					"\n");
-
-					
-					
-				
+					",");
+			
+					if(i==0){
+						bw.write(arff.pClass);
+		
+					}
+					bw.write("\n");
+													
 	}
 }
 
@@ -137,7 +141,7 @@ public static void writeSingleTrialCSV(String OUTPUTFOLDER, Arff arff, String re
 
 			}
 
-			bw.write(header + keys+"\n");
+			bw.write(header + keys+"pClass"+"\n");
 			
 			
 			
@@ -189,7 +193,7 @@ public static void writeDiffCSV(String OUTPUTFOLDER, Arff arff, String relation)
 			String header = "frame," +
 					"speedKey0,speedKey1,speedKey2,speedKey3,speedKey4,speedKey5,speedKey6,speedKey7," +
 					"angKey0,angKey1,angKey2,angKey3,angKey4,angKey5," +
-					"jerkKey0,jerkKey1,jerkKey2,jerkKey3,jerkKey4,jerkKey5,jerkKey6,jerkKey7" +"\n" ;
+					"jerkKey0,jerkKey1,jerkKey2,jerkKey3,jerkKey4,jerkKey5,jerkKey6,jerkKey7,pClass" +"\n" ;
 			bw.write(header);
 			
 			
