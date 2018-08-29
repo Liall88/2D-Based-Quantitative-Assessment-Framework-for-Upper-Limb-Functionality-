@@ -42,6 +42,8 @@ package dataExtraction;
  *TODO: use indicator for which arm is parietic L or R for automatic analysis
  *TODO: scale after metrics are caluclated in order to make all lists the same length
  *
+ *
+ *assume PARIETIC IS THE PATIENTS RIGHT ARM, if not INVERT the video
 
  */
 import java.io.BufferedWriter;
@@ -70,6 +72,10 @@ public class MakeSingleTrialArffs {
 	private static String WMFTClass;//wolf motor function class (0-5) or ? if unknown
 	private static String folderName;
 	private static String FILEEXT;
+	private static Integer ptrialSize;
+	private static Integer nptrialSize;
+	private static Integer difftrialSize;
+
 	//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
 	private static String OUTPUTFOLDER;
 	 //static String OUT ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
@@ -82,6 +88,9 @@ public class MakeSingleTrialArffs {
 	 */
 	
 	//where temporal analysis arff files will be stored
+	//NPFILES are for the NP trial (patient L arm)
+	//P Files are for the P trial (patient R arm)
+	
 	private static String NPSPEEDFILE;
 	private static String NPANGFILE;
 	private static String XDISFILE;
@@ -121,7 +130,8 @@ public class MakeSingleTrialArffs {
 	private static ArrayList<Skeleton> pSkeletonList = new ArrayList<Skeleton>();//trial1: right arm
 	
 	//Arraylists Of angles of each Skeletons at each frame of both paretic and non-paretic skeletons at each frame
-	//2D arrays that contain arraylists of data for each keypoint(0-7)
+	//2D arrays that contain arraylists of data for each keypoint useful for that trial
+	//GIVEN that p is R arm - p files contain the 0-4 keypoints  and angles 0,1,2 while L arm contains the 0,5,6,7 keypoints and angles 3,4,5
 	
 	//arraylists of x and y coordinates of openpose test
 	private static ArrayList<ArrayList<Double>> npXList = new ArrayList<ArrayList<Double>>();
@@ -613,11 +623,12 @@ public class MakeSingleTrialArffs {
 
 	}
 	//gets differences between two difference lists
-	public static ArrayList<Double> calDiff (ArrayList<Double> npList, ArrayList<Double> pList ){
+	public static ArrayList<Double> calDiff (ArrayList<Double> npList, ArrayList<Double> pList){
 		ArrayList<Double> distList = new ArrayList<Double>();
 		for(int i =0; i<npList.size(); i++){
 			distList.add((Math.abs(npList.get(i)- pList.get(i))));
 			//System.out.println("debug diff value:" + distList.get(i));
+			//System.out.println("debug: i:" +i);
 			}
 		
 		return distList;
@@ -626,15 +637,306 @@ public class MakeSingleTrialArffs {
 	//gets differences between two difference lists
 		public static ArrayList<ArrayList<Double>> setDiff (ArrayList<ArrayList<Double>> diffList, ArrayList<ArrayList<Double>> npMultiList, ArrayList<ArrayList<Double>>pMultiList){
 			
-			for(int i =0;i<npMultiList.size();i++ ){//for each keypoint
-				diffList.add(calDiff(npMultiList.get(i), pMultiList.get(i)));
+			ArrayList<Double> nullList=new ArrayList<Double>();
+			for(int i =0; i<npMultiList.get(0).size();i++){
+				nullList.add(null);
 			}
 			
+		
+				for(int i =0;i<npMultiList.size();i++ ){//for each keypoint
+					try{
+						diffList.add(calDiff(npMultiList.get(i), pMultiList.get(i)));}
+					catch(NullPointerException e){
+						diffList.add(nullList);
+					}
+			
+				}
 			return diffList;
 		}
 	
 
 	private static void setMetricsLists(){ //sets the 2D arrays representing arraylist for each keypoint 
+		//given that patient R limb is always considered parietic 
+		//add all lists to correct list for p and np
+		ArrayList<Double> nullList= new ArrayList<Double>();
+		
+		//add null lists to Ang so all lists are of same size
+		for(int i =0; i<pAng1List.size();i++){
+			nullList.add(null);
+		}
+		pAngList.add(nullList);
+		pAngList.add(pAng0List);		
+		pAngList.add(pAng1List);
+		pAngList.add(pAng2List);
+		pAngList.add(nullList);
+
+		npAngList.add(nullList);
+		npAngList.add(npAng3List);
+		npAngList.add(npAng4List);
+		npAngList.add(npAng5List);
+		npAngList.add(nullList);
+
+		pSpeedList.add(pKey0SpeedList);
+		pSpeedList.add(pKey1SpeedList);
+		pSpeedList.add(pKey2SpeedList);
+		pSpeedList.add(pKey3SpeedList);
+		pSpeedList.add(pKey4SpeedList);
+
+		npSpeedList.add(npKey0SpeedList);
+		npSpeedList.add(npKey1SpeedList);
+		npSpeedList.add(npKey5SpeedList);
+		npSpeedList.add(npKey6SpeedList);
+		npSpeedList.add(npKey7SpeedList);
+		
+		pJerkList.add(pKey0JerkList);
+		pJerkList.add(pKey1JerkList);
+		pJerkList.add(pKey2JerkList);
+		pJerkList.add(pKey3JerkList);
+		pJerkList.add(pKey4JerkList);
+
+		npJerkList.add(npKey0JerkList);
+		npJerkList.add(npKey1JerkList);
+		npJerkList.add(npKey5JerkList);
+		npJerkList.add(npKey6JerkList);
+		npJerkList.add(npKey7JerkList);	
+		
+		disNormList.add(disKey0Norm);
+		disNormList.add(disKey1Norm);
+		disNormList.add(disKey2Norm);
+		disNormList.add(disKey3Norm);
+		disNormList.add(disKey4Norm);
+
+	
+	}
+	
+	
+	
+	//getter methods for Arff objects 
+	private static Arff getNPSpeedArff(){
+		Arff sArff = new Arff(NPSPEEDFILE,trial,WMFTClass,npSpeedList,nptrialSize);
+		return sArff;
+	}
+	private static Arff getNPJerkArff(){
+		Arff jArff = new Arff(NPJERKFILE,trial,WMFTClass,npJerkList,nptrialSize);
+		return jArff;
+	}
+	private static Arff getNPAngArff(){
+		Arff aArff = new Arff(NPANGFILE,trial,WMFTClass,npAngList,nptrialSize);
+		return aArff;
+	}
+	/*private static Arff getXDisFromRefArff(){
+		Arff dArff = new Arff(XDISFILE,trial,WMFTClass,disXList);
+		return dArff;
+	}*/
+	private static Arff getNPXArff(){
+		Arff npxArff = new Arff(NPXFILE,trial,WMFTClass,npXList,nptrialSize);
+		return npxArff;
+	}
+	private static Arff getNPYArff(){
+		Arff npyArff = new Arff(NPYFILE,trial,WMFTClass,npYList,ptrialSize);
+		return npyArff;
+	}
+	private static Arff getPXArff(){
+		Arff pxArff = new Arff(PXFILE,trial,WMFTClass,pXList,ptrialSize);
+		return pxArff;
+	}
+	private static Arff getPYArff(){
+		Arff pyArff = new Arff(PYFILE,trial,WMFTClass,pYList,ptrialSize);
+		return pyArff;
+	}
+	private static Arff getPSpeedArff(){
+		Arff sArff = new Arff(PSPEEDFILE,trial,WMFTClass,pSpeedList,ptrialSize);
+		return sArff;
+	}
+	private static Arff getPJerkArff(){
+		Arff jArff = new Arff(PJERKFILE,trial,WMFTClass,pJerkList,ptrialSize);
+		return jArff;
+	}
+	private static Arff getPAngArff(){
+		Arff aArff = new Arff(PANGFILE,trial,WMFTClass,pAngList,ptrialSize);
+		return aArff;
+	}
+	/*private static Arff getYDisFromRefArff(){
+		Arff dArff = new Arff(YDISFILE,trial,WMFTClass,disYList);
+		return dArff;
+	}*/
+	
+	private static Arff getDiffArff(){
+		Arff diffArff = new Arff(DIFFFILE, trial,WMFTClass, diffSpeedList, diffAngList, diffJerkList, disNormList,difftrialSize);
+		return diffArff;
+	}
+
+	
+
+	private static void setAllMetrics(ArrayList<Skeleton> npSkeletonList, ArrayList <Skeleton> pSkeletonList) throws IOException, ParseException{
+		
+		 setCoorList(npSkeletonList,npXKey0List,npXKey1List,npXKey2List,npXKey3List,npXKey4List,npXKey5List,npXKey6List,npXKey7List,
+				 npYKey0List,npYKey1List,npYKey2List,npYKey3List,npYKey4List,npYKey5List,npYKey6List,npYKey7List);
+		 setCoorList(pSkeletonList,pXKey0List,pXKey1List,pXKey2List,pXKey3List,pXKey4List,pXKey5List,pXKey6List,pXKey7List,
+				 pYKey0List,pYKey1List,pYKey2List,pYKey3List,pYKey4List,pYKey5List,pYKey6List,pYKey7List);
+		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
+		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
+		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
+		 setKeypointSpeeds(pSkeletonList, pKey0SpeedList, pKey1SpeedList,pKey2SpeedList, pKey3SpeedList,pKey4SpeedList, pKey5SpeedList, pKey6SpeedList,pKey7SpeedList);
+		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
+		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
+		 
+		  setReferenceTrajectory(npSkeletonList);
+		 setDisFromTraj(refTrajKey0,refTrajKey1,refTrajKey2,refTrajKey3,refTrajKey4,refTrajKey5,refTrajKey6,refTrajKey7, pSkeletonList);
+		 setNormDistances();		 
+		 setMetricsLists();	
+		 
+		 setDiff(diffSpeedList,npSpeedList,pSpeedList);
+		 setDiff(diffAngList,npAngList,pAngList);
+		 setDiff(diffJerkList,npJerkList,pJerkList);	
+			 
+
+	}
+		
+	
+	 public static void main(String[] args) throws IOException, ParseException {
+		
+		 System.out.println("MakeSingleArffs: writing Trial");
+		 System.out.println("MakeSingleArffs: writing Trial");
+
+		
+		WMFTClass="5";//wolf motor function class (0-5) or ? if unknown
+		trial = 0; 
+		INPUTFOLDER="/data/la2817/LIALLFILE/JSONandVIDS/JSON/Side/LiallSide/WMFT"+WMFTClass+"/trial" +trial + "/";
+		OUTPUTFOLDER="/data/la2817/LIALLFILE/CSV/csvOutputs/ResultsDataset/SimulatedStrokeCup/WMFT"+WMFTClass+"/trial"+trial+"Metrics/";		
+		FILEEXT=".csv"; 	
+		FILEEXT=".csv";
+
+		System.out.println("inputFolder: "+INPUTFOLDER);
+		System.out.println("outputFolder: "+OUTPUTFOLDER);
+				
+		//INPUTFOLDER= "/data/la2817/LIALLFILE/JSONandVIDS/JSON/Side/LiallSide/WMFT"+WMFTClass+"/trial" +trial + "/";
+		//OUTPUTFOLDER="/data/la2817/LIALLFILE/CSV/csvOutputs/ResultsDataset/Side/LiallSide/SimStroke/WMFT"+WMFTClass+"/trial"+trial+"Metrics/";	
+		
+		//INPUTFOLDER="/data/la2817/LIALLFILE/mixedData/JSON/Katy/WMFT"+WMFTClass+"/trial" +trial + "/";
+		//folderName="lateExperimentWMFT4";		//OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/csvOutputs/newCSV1/Mohammed/WMFT"+WMFTClass+"/"+"/test"+trial+"Metrics/";		
+		//folderName="lateExperiment";
+		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
+		///homes/la2817/Desktop/Outputs/arff_Outputs/testData/longExcercises/test0Metrics
+		 //OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/"+folderName +"/test" + trial +"Metrics/";
+		 //INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/trainingData/MLExercises/"+folderName+"/trial" +trial + "/";
+		
+		 //OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/csv_Outputs/trainingData/MLExercises/"+folderName +"/test" + trial +"Metrics/";
+		 //FILEEXT=".arff";
+
+
+		 //static String OUT ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
+		//arff_Outputs.testData.symposiumCupExercises.test1Metrics;
+		//final static String OUTPUTFOLDER = "/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics/";
+		//String OUTPUTFOLDER = getClass().getResource(arg0)"/Outputs/arff_Outputs/testData"+folderName+"/test"+trial+"Metrics/");
+
+		NPSPEEDFILE= OUTPUTFOLDER+ "NPspeeds" +trial+FILEEXT;	
+		NPANGFILE= OUTPUTFOLDER+ "NPangles" +trial+FILEEXT;
+		XDISFILE = OUTPUTFOLDER + "XdisFromRef" +trial+FILEEXT;
+		NPJERKFILE = OUTPUTFOLDER + "NPjerkiness" +trial+FILEEXT;
+		NPXFILE = OUTPUTFOLDER + "NPxPos" +trial+FILEEXT;
+		NPYFILE = OUTPUTFOLDER + "NPyPos" +trial+FILEEXT;
+	
+		PSPEEDFILE= OUTPUTFOLDER+ "Pspeeds" +trial+FILEEXT;	
+		PANGFILE= OUTPUTFOLDER+ "Pangles" +trial+FILEEXT;
+		YDISFILE = OUTPUTFOLDER + "YdisFromRef" +trial+FILEEXT;
+		PJERKFILE = OUTPUTFOLDER + "Pjerkiness" +trial+FILEEXT;
+		PXFILE = OUTPUTFOLDER + "PxPos" +trial+FILEEXT;
+		PYFILE = OUTPUTFOLDER + "PyPos" +trial+FILEEXT;
+		
+		DIFFFILE = OUTPUTFOLDER + "diffFile" +trial+FILEEXT;
+
+		
+		//where JSON inputs are
+		nonParFiles = new File(INPUTFOLDER + "nptrial" +trial +"JSON" ).listFiles();
+		parFiles = new File(INPUTFOLDER +"ptrial" +trial+"JSON" ).listFiles();
+		pIsRight=true; //Paretic limb position, change for each trial
+		
+		 arff.ArffReader.generalSetPathArray(nonParFiles, nonparPaths);		
+		 arff.ArffReader.generalSetPathArray(parFiles, parPaths);	
+		 
+		 setSkeletonList(nonparPaths, npSkeletonList); 
+		 setSkeletonList(parPaths, pSkeletonList);
+		 
+		 ptrialSize=Math.abs(pSkeletonList.size());
+		 nptrialSize=Math.abs(npSkeletonList.size());
+		 difftrialSize=Math.abs(nptrialSize-ptrialSize);
+
+		 System.out.println("debug: ptrialSize:"+ptrialSize);
+		 System.out.println("debug: nptrialSize:"+nptrialSize);
+
+		 
+		// System.out.println("Debug: npListScaledSize: "+npListScaled.size());
+		 
+		 //WMFT Simulator trials
+		 //ArrayList <Skeleton> npListScaled = MultipleTrialsData.scaleList(npSkeletonList, 100);
+		 //ArrayList <Skeleton> simWMFT=WMFTSimulator.getSimulatedWMFTSKList(5,MultipleTrialsData.scaleList(pSkeletonList, 100), npListScaled);		
+		 // setAllMetrics(npListScaled, simWMFT);
+
+		 //System.out.println("DEBUG: simWMFT size: "+ simWMFT.size());
+		 
+		 
+		 //real trials
+		 //scale np and p lists before writing
+		 setAllMetrics(scaleList(npSkeletonList, 100),scaleList(pSkeletonList, 100));	
+		 
+		 Arff npspeedArff= getNPSpeedArff();
+		 Arff npangArff= getNPAngArff();
+		 	 
+		 Arff npjerkArff= getNPJerkArff();
+		 
+		 Arff pspeedArff= getPSpeedArff();
+		 Arff pangArff= getPAngArff();
+		
+		 Arff pjerkArff= getPJerkArff();
+		 
+		 Arff diffArff=getDiffArff();
+		
+		 
+		 //Arff xdisArff= getXDisFromRefArff();
+		 //Arff npXPosArff = getNPXArff();
+		 //Arff npYPosArff = getNPYArff(); 
+		 //Arff pXPosArff = getPXArff();
+		 //Arff pYPosArff = getPYArff();
+		// Arff ydisArff= getYDisFromRefArff();
+		 //Arff simulatedWMFT2 = WMFTSimulator.
+		 
+		 //System.out.println("DEBUG: npangArff.list.get(0).size()"+npangArff.list.get(0).size());
+		 //System.out.println("DEBUG: npjerkArff.list.get(0).size()"+npjerkArff.list.get(0).size());
+		 //System.out.println("DEBUG: npspeedArff.list.get(0).size()"+npspeedArff.list.get(0).size());
+		// System.out.println("DEBUG: XdisArff.list.get(0).size()"+xdisArff.multilist.get(0).size());
+		
+		 //System.out.println("DEBUG: outputfolder : "+OUTPUTFOLDER);
+		
+		 
+		 ArffWriter.cleanAndMakeOutputDirectory(OUTPUTFOLDER);
+		
+		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npspeedArff, "speed",5);
+		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npangArff, "angle",5);
+		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npjerkArff, "jerk",5);
+
+		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pspeedArff, "speed",5);
+		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pangArff, "angle",5);
+		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pjerkArff, "jerk",5);
+		// ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, xdisArff, "xDis",8);
+		// ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, ydisArff, "yDis",8);		 
+
+		 
+		 ArffWriter.writeDiffCSV(OUTPUTFOLDER,diffArff, "diff");
+		 
+		 
+		// ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npXPosArff, "xpos", 8);
+		 //ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npYPosArff, "ypos", 8);
+		// ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pXPosArff, "xpos", 8);
+		// ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pYPosArff, "ypos", 8);
+		
+		 
+	}
+}
+	 
+
+	 /* OLD METHOD
+	  * private static void setMetricsLists(){ //sets the 2D arrays representing arraylist for each keypoint 
 		
 		npAngList.add(npAng0List);pAngList.add(pAng0List);
 		npAngList.add(npAng1List);pAngList.add(pAng1List);
@@ -691,201 +993,8 @@ public class MakeSingleTrialArffs {
 		npJerkList.add(npKey6JerkList);pJerkList.add(pKey6JerkList);
 		npJerkList.add(npKey7JerkList);pJerkList.add(pKey7JerkList);
 
-	}
-	
-	
-	
-	//getter methods for Arff objects 
-	private static Arff getNPSpeedArff(){
-		Arff sArff = new Arff(NPSPEEDFILE,trial,WMFTClass,npSpeedList);
-		return sArff;
-	}
-	private static Arff getNPJerkArff(){
-		Arff jArff = new Arff(NPJERKFILE,trial,WMFTClass,npJerkList);
-		return jArff;
-	}
-	private static Arff getNPAngArff(){
-		Arff aArff = new Arff(NPANGFILE,trial,WMFTClass,npAngList);
-		return aArff;
-	}
-	private static Arff getXDisFromRefArff(){
-		Arff dArff = new Arff(XDISFILE,trial,WMFTClass,disXList);
-		return dArff;
-	}
-	private static Arff getNPXArff(){
-		Arff npxArff = new Arff(NPXFILE,trial,WMFTClass,npXList);
-		return npxArff;
-	}
-	private static Arff getNPYArff(){
-		Arff npyArff = new Arff(NPYFILE,trial,WMFTClass,npYList);
-		return npyArff;
-	}
-	private static Arff getPXArff(){
-		Arff pxArff = new Arff(PXFILE,trial,WMFTClass,pXList);
-		return pxArff;
-	}
-	private static Arff getPYArff(){
-		Arff pyArff = new Arff(PYFILE,trial,WMFTClass,pYList);
-		return pyArff;
-	}
-	private static Arff getPSpeedArff(){
-		Arff sArff = new Arff(PSPEEDFILE,trial,WMFTClass,pSpeedList);
-		return sArff;
-	}
-	private static Arff getPJerkArff(){
-		Arff jArff = new Arff(PJERKFILE,trial,WMFTClass,pJerkList);
-		return jArff;
-	}
-	private static Arff getPAngArff(){
-		Arff aArff = new Arff(PANGFILE,trial,WMFTClass,pAngList);
-		return aArff;
-	}
-	private static Arff getYDisFromRefArff(){
-		Arff dArff = new Arff(YDISFILE,trial,WMFTClass,disYList);
-		return dArff;
-	}
-	
-	private static Arff getDiffArff(){
-		Arff diffArff = new Arff(DIFFFILE, trial,WMFTClass, diffSpeedList, diffAngList, diffJerkList);
-		return diffArff;
-	}
-
-	
-
-	private static void setAllMetrics(ArrayList<Skeleton> npSkeletonList, ArrayList <Skeleton> pSkeletonList) throws IOException, ParseException{
-		
-		 setCoorList(npSkeletonList,npXKey0List,npXKey1List,npXKey2List,npXKey3List,npXKey4List,npXKey5List,npXKey6List,npXKey7List,
-				 npYKey0List,npYKey1List,npYKey2List,npYKey3List,npYKey4List,npYKey5List,npYKey6List,npYKey7List);
-		 setCoorList(pSkeletonList,pXKey0List,pXKey1List,pXKey2List,pXKey3List,pXKey4List,pXKey5List,pXKey6List,pXKey7List,
-				 pYKey0List,pYKey1List,pYKey2List,pYKey3List,pYKey4List,pYKey5List,pYKey6List,pYKey7List);
-		 setAnglesList(npSkeletonList, npAng0List, npAng1List, npAng2List, npAng3List, npAng4List, npAng5List);
-		 setAnglesList(pSkeletonList, pAng0List, pAng1List, pAng2List, pAng3List, pAng4List, pAng5List);
-		 setKeypointSpeeds(npSkeletonList, npKey0SpeedList, npKey1SpeedList,npKey2SpeedList, npKey3SpeedList,npKey4SpeedList, npKey5SpeedList, npKey6SpeedList,npKey7SpeedList);
-		 setKeypointSpeeds(pSkeletonList, pKey0SpeedList, pKey1SpeedList,pKey2SpeedList, pKey3SpeedList,pKey4SpeedList, pKey5SpeedList, pKey6SpeedList,pKey7SpeedList);
-		// setReferenceTrajectory(npSkeletonList);
-		// setDisFromTraj(refTrajKey0,refTrajKey1,refTrajKey2,refTrajKey3,refTrajKey4,refTrajKey5,refTrajKey6,refTrajKey7, pSkeletonList);
-		 setNormDistances();
-		 setJerk(npSkeletonList,npKey0JerkList,npKey1JerkList,npKey2JerkList,npKey3JerkList,npKey4JerkList,npKey5JerkList,npKey6JerkList,npKey7JerkList );
-		 setJerk(pSkeletonList,pKey0JerkList,pKey1JerkList,pKey2JerkList,pKey3JerkList,pKey4JerkList,pKey5JerkList,pKey6JerkList,pKey7JerkList);
-		 setMetricsLists();		 
-		 setDiff(diffSpeedList,npSpeedList,pSpeedList);
-		 setDiff(diffAngList,npAngList,pAngList);
-		 setDiff(diffJerkList,npJerkList,pJerkList);
-	}
-	
-	
-	 public static void main(String[] args) throws IOException, ParseException {
-
-		trial = 9;
-		 
-		WMFTClass="4";//wolf motor function class (0-5) or ? if unknown
-		folderName="earlyExperimentWMFT1";
-		//folderName="lateExperiment";
-		//TODO:MAKE LOCAL PATHS TO ECLIPSE,GET LOCAL INPUT AND OUTPUT FILEPATHS
-		///homes/la2817/Desktop/Outputs/arff_Outputs/testData/longExcercises/test0Metrics
-		 //OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/arff_Outputs/trainingData/"+folderName +"/test" + trial +"Metrics/";
-		 OUTPUTFOLDER = "/homes/la2817/Desktop/Outputs/csv_Outputs/trainingData/MLExercises/"+folderName +"/test" + trial +"Metrics/";
-		 FILEEXT=".csv";
-		 //FILEEXT=".arff";
-
-
-		 //static String OUT ="/Outputs/arff_Outputs/testDara/symposiumCupExercises/test"+trial+"Metrics";
-		//arff_Outputs.testData.symposiumCupExercises.test1Metrics;
-		//final static String OUTPUTFOLDER = "/Outputs/arff_Outputs/testData/"+folderName +"/test" + trial +"Metrics/";
-		//String OUTPUTFOLDER = getClass().getResource(arg0)"/Outputs/arff_Outputs/testData"+folderName+"/test"+trial+"Metrics/");
-		INPUTFOLDER = "/homes/la2817/Desktop/Outputs/openPose_outputs/trainingData/MLExercises/"+folderName+"/trial" +trial + "/";
-
-		NPSPEEDFILE= OUTPUTFOLDER+ "NPspeeds" +trial+FILEEXT;	
-		NPANGFILE= OUTPUTFOLDER+ "NPangles" +trial+FILEEXT;
-		XDISFILE = OUTPUTFOLDER + "XdisFromRef" +trial+FILEEXT;
-		NPJERKFILE = OUTPUTFOLDER + "NPjerkiness" +trial+FILEEXT;
-		NPXFILE = OUTPUTFOLDER + "NPxPos" +trial+FILEEXT;
-		NPYFILE = OUTPUTFOLDER + "NPyPos" +trial+FILEEXT;
-	
-		PSPEEDFILE= OUTPUTFOLDER+ "Pspeeds" +trial+FILEEXT;	
-		PANGFILE= OUTPUTFOLDER+ "Pangles" +trial+FILEEXT;
-		YDISFILE = OUTPUTFOLDER + "YdisFromRef" +trial+FILEEXT;
-		PJERKFILE = OUTPUTFOLDER + "Pjerkiness" +trial+FILEEXT;
-		PXFILE = OUTPUTFOLDER + "PxPos" +trial+FILEEXT;
-		PYFILE = OUTPUTFOLDER + "PyPos" +trial+FILEEXT;
-		
-		DIFFFILE = OUTPUTFOLDER + "diffFile" +trial+FILEEXT;
-
-		
-		//where JSON inputs are
-		nonParFiles = new File(INPUTFOLDER + "nptest" +trial +"JSON" ).listFiles();
-		parFiles = new File(INPUTFOLDER +"ptest" +trial+"JSON" ).listFiles();
-		pIsRight=true; //Paretic limb position, change for each trial
-		
-		 arff.ArffReader.generalSetPathArray(nonParFiles, nonparPaths);		
-		 arff.ArffReader.generalSetPathArray(parFiles, parPaths);	
-		 
-		 setSkeletonList(nonparPaths, npSkeletonList); 
-		 setSkeletonList(parPaths, pSkeletonList);
-		 
-		// System.out.println("Debug: npListScaledSize: "+npListScaled.size());
-		 
-		 //WMFT Simulator trials
-		 //ArrayList <Skeleton> npListScaled = MultipleTrialsData.scaleList(npSkeletonList, 100);
-		 //ArrayList <Skeleton> simWMFT=WMFTSimulator.getSimulatedWMFTSKList(5,MultipleTrialsData.scaleList(pSkeletonList, 100), npListScaled);		
-		 // setAllMetrics(npListScaled, simWMFT);
-
-		 //System.out.println("DEBUG: simWMFT size: "+ simWMFT.size());
-		 
-		 
-		 //real trials
-		 //scale np and p lists before writing
-		 setAllMetrics(scaleList(npSkeletonList, 100),scaleList(pSkeletonList, 100));	
-		 
-		 Arff npspeedArff= getNPSpeedArff();
-		 Arff npangArff= getNPAngArff();
-		 Arff xdisArff= getXDisFromRefArff();
-		 Arff npXPosArff = getNPXArff();
-		 Arff npYPosArff = getNPYArff();	 
-		 Arff npjerkArff= getNPJerkArff();
-		 
-		 Arff pspeedArff= getPSpeedArff();
-		 Arff pangArff= getPAngArff();
-		 Arff pXPosArff = getPXArff();
-		 Arff pYPosArff = getPYArff();
-		 Arff ydisArff= getYDisFromRefArff();
-		 Arff pjerkArff= getPJerkArff();
-		 
-		 Arff diffArff=getDiffArff();
-		 
-		 //Arff simulatedWMFT2 = WMFTSimulator.
-		 
-		 //System.out.println("DEBUG: npangArff.list.get(0).size()"+npangArff.list.get(0).size());
-		 //System.out.println("DEBUG: npjerkArff.list.get(0).size()"+npjerkArff.list.get(0).size());
-		 //System.out.println("DEBUG: npspeedArff.list.get(0).size()"+npspeedArff.list.get(0).size());
-		 //System.out.println("DEBUG: XdisArff.list.get(0).size()"+xdisArff.list.get(0).size());
-		
-		 System.out.println("DEBUG: outputfolder : "+OUTPUTFOLDER);
-		 ArffWriter.cleanAndMakeOutputDirectory(OUTPUTFOLDER);
-		
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npspeedArff, "speed",8);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npangArff, "angle",6);
-		 
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npXPosArff, "xpos", 8);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npYPosArff, "ypos", 8);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pXPosArff, "xpos", 8);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pYPosArff, "ypos", 8);
-
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, xdisArff, "xDis",8);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, npjerkArff, "jerk",8);
-
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pspeedArff, "speed",8);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pangArff, "angle",6);
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, ydisArff, "yDis",8);		 
-		 ArffWriter.writeSingleTrialCSV(OUTPUTFOLDER, pjerkArff, "jerk",8);
-		 
-		 ArffWriter.writeDiffCSV(OUTPUTFOLDER,diffArff, "diff");
-		 
-	}
-}
-	 
-
-	 
+	}*/
+	  
 	 
 	 
  
