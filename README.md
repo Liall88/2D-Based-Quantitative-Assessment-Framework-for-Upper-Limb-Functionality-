@@ -19,7 +19,7 @@
                            `=--=-'                    hjw
 
 
-#2D- Motor Function Analysis Neural Network (working title)
+2D- Motor Function Analysis Neural Network (working title)
 
 
 The increase in the world elderly population paired with a global nursing shortage has motivated
