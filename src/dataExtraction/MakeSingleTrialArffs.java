@@ -1,4 +1,3 @@
-//WOLFWOLFWOLFWOLF
 package dataExtraction;
 /**
  * Author: Liall Arafa
@@ -9,14 +8,15 @@ package dataExtraction;
 /**
  * @author la2817
  * 
- * Project: Training a neural network in order to correctly identify motor function in the upper limbs from a 2D camera
+ * Project: Training a neural network in order to correctly quantify post - stroke motor function in the upper limbs from 2D video of patient exercises 
  * 
  * This class is used to calculate kinematic features for use of quantification of upper limb motor functionality analysis
  * It will be done by first analysing the non-paretic arm as a standard, and comparing the paretic arm to it
  * It then outputs the kinematic features into arff files in order to prepare for machine learrnign
  * 
  * metrics are calculated per frame rather than per second 
- * 
+ * assume PARIETIC IS THE PATIENTS RIGHT ARM, if not flip the video
+
  *Metrics:
  *trajectory error - is a measure of spatial deviation of the wrist trajectory from the reference trajectory
  *velocity profile deviation - measure of the deviation of the speed profile from the reference speed profile, calculated from the non-paretic arm
@@ -29,21 +29,18 @@ package dataExtraction;
  * 
  * class generates and returns arff object generated for each metric for each openpose trial
  
- REMEMBER YOUR RESULTS ARE BEING ASSESSED NOT YOUR CODE!
  
- *TODO: change arrays into arraylists (if decide to cap number of frames being viewed
+ *TODO: change arraylists into arrays
  *TODO: add confidence scores for each metric in order to weight higher confidence scores more
  *TODO: add optimisation weights and thresholds
  *TODO: segmentation in the X-Y plane possible? 
  *TODO: put arff writing into separate class
  *TODO:upload File Structure needed in GitHub
  *TODO: save openpose outputs and arff outputs relative to eclipse project not using absolute paths
- *TODO: Write patientinfo.txt into folder]
+ *TODO: Write patientinfo.txt into folder
  *TODO: use indicator for which arm is parietic L or R for automatic analysis
- *TODO: scale after metrics are caluclated in order to make all lists the same length
  *
  *
- *assume PARIETIC IS THE PATIENTS RIGHT ARM, if not INVERT the video
 
  */
 import java.io.BufferedWriter;
