@@ -7,9 +7,7 @@ package dataExtraction;
  */
 /**
  * @author la2817
- * 
- * Project: Training a neural network in order to correctly quantify post - stroke motor function in the upper limbs from 2D video of patient exercises 
- * 
+ *  * 
  * This class is used to calculate kinematic features for use of quantification of upper limb motor functionality analysis
  * It will be done by first analysing the non-paretic arm as a standard, and comparing the paretic arm to it
  * It then outputs the kinematic features into arff files in order to prepare for machine learrnign
