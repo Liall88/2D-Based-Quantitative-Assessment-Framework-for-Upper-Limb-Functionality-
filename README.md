@@ -40,7 +40,8 @@ completing movement exercises in accordance with an experimental set up. Those f
 used to train support vector regression models to learn quantitative assessment functions which
 generate an assessment score given a set of features.
 
-Please read the thesis included in this project for the more detail on the background , motivation and reasoning behind the code.  
+Please read the thesis included in this project for the more detail on the background , motivation and reasoning behind the code. It can also be found here:
+https://drive.google.com/file/d/1XEs2cRR_IOtNR6u8WLDqiNeA6TtFzc6u/view?usp=sharing
 _______________
 
 Prerequistites: OpenPose (and it's requirements)
