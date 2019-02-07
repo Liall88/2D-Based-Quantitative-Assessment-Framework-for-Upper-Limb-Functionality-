@@ -35,6 +35,8 @@ used to train support vector regression models to learn quantitative assessment 
 generate an assessment score given a set of features.
 
 
+Please read the thesis included in this project for the more detail on the background , motivation and reasonings behind the code.  
+
 
 TODO: add all file paths local to eclipse project
 TODO: scale metrics after metrics calculated in order to avoid loss of frames 
