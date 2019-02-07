@@ -19,7 +19,7 @@
                            `=--=-'                    hjw
 
 
-2D- Motor Function Analysis Neural Network (working Title)
+#2D- Motor Function Analysis Neural Network (working title)
 
 
 The increase in the world elderly population paired with a global nursing shortage has motivated
@@ -35,7 +35,7 @@ used to train support vector regression models to learn quantitative assessment 
 generate an assessment score given a set of features.
 
 
-# 2D-MFANN
+
 TODO: add all file paths local to eclipse project
 TODO: scale metrics after metrics calculated in order to avoid loss of frames 
 
