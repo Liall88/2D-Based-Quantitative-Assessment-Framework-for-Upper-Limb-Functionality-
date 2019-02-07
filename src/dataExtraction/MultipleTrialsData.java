@@ -27,14 +27,12 @@ import arff.ArffWriter;
 /**
  * @author la2817
  *
- *TODO: fix parser errors, do by hand for now as errors
- *
+  // Calculates the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk 
  */
 public class MultipleTrialsData {
 	//number of trials 
 	final int trialNum = MakeSingleTrialArffs.numOfTests;
 	
-	//the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk 
 	
 	// private static ArrayList<ArrayList<Double>> allMetricsAvrgList
 	
