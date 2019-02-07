@@ -20,7 +20,7 @@
 
  
 
-#2D-Based-Quantitative-Assessment-Framework-for-Upper-Limb-Functionality
+# 2D-Based-Quantitative-Assessment-Framework-for-Upper-Limb-Functionality
 Liall Arafa
 Imperial College 
 MRes Project
@@ -38,20 +38,26 @@ used to train support vector regression models to learn quantitative assessment 
 generate an assessment score given a set of features.
 
 Please read the thesis included in this project for the more detail on the background , motivation and reasoning behind the code.  
-_
+_______________
+
+Prerequistites: OpenPose (and it's requirements)
+OpenPose :https://github.com/CMU-Perceptual-Computing-Lab/openpose
+
+## Modules
+
+### arff:
+An arff file contains the differences in the metrics speed, angle, jerk and normalised distance between paretic and non- paretic limbs for each keypoint for each frame of a patient completing a particular exercise 
+
+### dataExtraction -
+MakeSingleTrialArffs.java (Main)-  Takes the JSON outputs from a video of a patient completing an exercise using the non-paretic limb run through OpenPose, and a video of the patient using the paretic limb run through OpenPose. Both videos must be of the same exercise but using different limbs. This class then calculates the differences in the metrics described the arff module and stores it in an arff file
+
+MultipleTrialsDataArffs.java (Main) - Takes multiple single trial arff files as input and calculates the averages of the differences (non-paretic  -   paretic) at each frame for each metric over multiple trials  of the same exercise. It outputs these averages in an arff file for each metric. These average arff files can be used in Support Vector Regression and other machine learning techniques and methods in order to quantify functionality.
+
+### graphs - 
+graphMaker.java (Main) -Used to output graphs of an arff directly from code 
+
+### wekaTutorials  - 
+Test classes for Weka
 
 
-
-##Modules
-
-###arff:
-An arff file contains the differences in speed, angle, jerk and normalised distance between paretic and non- paretic limbs for each keypoint for each frame of a patient completing a particular exercise 
-
-###dataExtraction -
-MakeSingleTrialArffs.java (Main)- creates an Arff file for a single patient trial of an exercise 
-MultipleTrialsDataArffs.java (Main) - Calculates the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk over multiple trials and outputs in an arff file for each metric. These average arff files can be used for SVR and machine learning techniques and methods 
-
-###graphs - 
-graphMaker.java -Used to output graphs of an arff directly from code 
-
-###wekaTutorials  - Test classes for Weka
+For questions please contact me at liall88@gmail.com
