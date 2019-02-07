@@ -19,7 +19,11 @@
                            `=--=-'                    hjw
 
 
-2D- Motor Function Analysis Neural Network - 2DMFANN (working title)
+Liall Arafa
+Imperial College 
+MRes Project 
+
+2D-Based-Quantitative-Assessment-Framework-for-Upper-Limb-Functionality
 
 
 The increase in the world elderly population paired with a global nursing shortage has motivated
@@ -36,3 +40,11 @@ generate an assessment score given a set of features.
 
 
 Please read the thesis included in this project for the more detail on the background , motivation and reasoning behind the code.  _
+
+Modules : 
+arff
+dataExtraction
+graphs
+wekaTutorials
+
+
