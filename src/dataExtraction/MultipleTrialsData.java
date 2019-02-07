@@ -27,7 +27,7 @@ import arff.ArffWriter;
 /**
  * @author la2817
  *
-  // Calculates the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk 
+  // Calculates the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk over multiple trials and outputs in an arff file for each metric
  */
 public class MultipleTrialsData {
 	//number of trials 
