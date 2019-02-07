@@ -1,17 +1,5 @@
-# 2D-MFANN
-TODO: add all file paths local to eclipse project
-TODO: make CSVWriter.java in addition to ArffWriter.java
-TODO: scale metrics after metrics calculated in order to avoid loss of frames 
 
 
-
-
-
-
-
-
-
- _
                            _ooOoo_
                           o8888888o
                           88" . "88
@@ -30,3 +18,20 @@ TODO: scale metrics after metrics calculated in order to avoid loss of frames
              \  \ `-.   \_\_`. _.'_/_/  -' _.' /
    ===========`-.`___`-.__\ \___  /__.-'_.'_.-'================
                            `=--=-'                    hjw
+
+
+
+# 2D-MFANN
+TODO: add all file paths local to eclipse project
+TODO: make CSVWriter.java in addition to ArffWriter.java
+TODO: scale metrics after metrics calculated in order to avoid loss of frames 
+
+
+
+
+
+
+
+
+
+ _
