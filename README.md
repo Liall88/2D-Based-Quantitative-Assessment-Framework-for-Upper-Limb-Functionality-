@@ -18,13 +18,12 @@
    ===========`-.`___`-.__\ \___  /__.-'_.'_.-'================
                            `=--=-'                    hjw
 
+ 
 
+#2D-Based-Quantitative-Assessment-Framework-for-Upper-Limb-Functionality
 Liall Arafa
 Imperial College 
-MRes Project 
-
-2D-Based-Quantitative-Assessment-Framework-for-Upper-Limb-Functionality
-
+MRes Project
 
 The increase in the world elderly population paired with a global nursing shortage has motivated
 the research and development of quantitative assessment for rehabilitation. In spite of existing
@@ -43,18 +42,16 @@ _
 
 
 
-Modules : 
-arff:
+##Modules
+
+###arff:
 An arff file contains the differences in speed, angle, jerk and normalised distance between paretic and non- paretic limbs for each keypoint for each frame of a patient completing a particular exercise 
 
-dataExtraction -
-Classes:
+###dataExtraction -
 MakeSingleTrialArffs.java (Main)- creates an Arff file for a single patient trial of an exercise 
 MultipleTrialsDataArffs.java (Main) - Calculates the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk over multiple trials and outputs in an arff file for each metric. These average arff files can be used for SVR and machine learning techniques and methods 
 
+###graphs - 
+graphMaker.java -Used to output graphs of an arff directly from code 
 
-
-graphs - Used to output graphs of metrics over a trial directly from code 
-
-
-wekaTutorials  - Test classes for Weka
+###wekaTutorials  - Test classes for Weka
