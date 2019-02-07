@@ -38,13 +38,23 @@ completing movement exercises in accordance with an experimental set up. Those f
 used to train support vector regression models to learn quantitative assessment functions which
 generate an assessment score given a set of features.
 
+Please read the thesis included in this project for the more detail on the background , motivation and reasoning behind the code.  
+_
 
-Please read the thesis included in this project for the more detail on the background , motivation and reasoning behind the code.  _
+
 
 Modules : 
-arff
-dataExtraction
-graphs
-wekaTutorials
+arff:
+An arff file contains the differences in speed, angle, jerk and normalised distance between paretic and non- paretic limbs for each keypoint for each frame of a patient completing a particular exercise 
+
+dataExtraction -
+Classes:
+MakeSingleTrialArffs.java (Main)- creates an Arff file for a single patient trial of an exercise 
+MultipleTrialsDataArffs.java (Main) - Calculates the averages of the differences (WMFT5-WMFTx)at each frame for angle, speed, jerk over multiple trials and outputs in an arff file for each metric. These average arff files can be used for SVR and machine learning techniques and methods 
 
 
+
+graphs - Used to output graphs of metrics over a trial directly from code 
+
+
+wekaTutorials  - Test classes for Weka
