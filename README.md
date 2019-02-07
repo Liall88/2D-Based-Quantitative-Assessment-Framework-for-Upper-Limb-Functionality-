@@ -49,7 +49,7 @@ OpenPose :https://github.com/CMU-Perceptual-Computing-Lab/openpose
 An arff file contains the differences in the metrics speed, angle, jerk and normalised distance between paretic and non- paretic limbs for each keypoint for each frame of a patient completing a particular exercise 
 
 ### dataExtraction -
-MakeSingleTrialArffs.java (Main)-  Takes the JSON outputs from a video of a patient completing an exercise using the non-paretic limb run through OpenPose, and a video of the patient using the paretic limb run through OpenPose. Both videos must be of the same exercise but using different limbs. This class then calculates the differences in the metrics described the arff module and stores it in an arff file
+MakeSingleTrialArffs.java (Main)-  Takes the JSON outputs from a video of a patient completing an exercise using the non-paretic limb run through OpenPose, and a video of the patient using the paretic limb run through OpenPose. Both videos must be of the same exercise but using different limbs. This class then calculates the differences in the metrics described in the arff module and outputs it in an arff file.
 
 MultipleTrialsDataArffs.java (Main) - Takes multiple single trial arff files as input and calculates the averages of the differences (non-paretic  -   paretic) at each frame for each metric over multiple trials  of the same exercise. It outputs these averages in an arff file for each metric. These average arff files can be used in Support Vector Regression and other machine learning techniques and methods in order to quantify functionality.
 
